@@ -1,0 +1,12 @@
+/* Estilos propios de la página de CATEGORÍAS.
+   Libertad total aquí: colores, tamaños, tarjetas... */
+
+#lista-categorias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+#ranking li {
+  padding: 4px 0;
+}

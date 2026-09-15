@@ -1,0 +1,15 @@
+/* Estilos propios de la página de JUEGO.
+   Libertad total aquí: colores, tamaños, animaciones... */
+
+#palabra-oculta {
+  font-size: 2rem;
+  letter-spacing: 8px;
+  text-align: center;
+}
+
+#teclado-letras {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}

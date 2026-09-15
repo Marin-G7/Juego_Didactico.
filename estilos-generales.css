@@ -1,0 +1,65 @@
+/* ============================================
+   ESTILOS GENERALES - Ahorcado Educativo
+   Este archivo lo comparten TODAS las páginas.
+   Aquí van los colores, tipografía y el menú.
+   No lo edites libremente sin avisar al equipo,
+   ya que afecta a las 4 páginas al mismo tiempo.
+   ============================================ */
+
+:root {
+  --color-primario: #2e5c8a;
+  --color-secundario: #f4a300;
+  --color-fondo: #f7f7f7;
+  --color-texto: #222222;
+  --fuente-principal: "Segoe UI", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--fuente-principal);
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+}
+
+/* Menú de navegación compartido */
+header.menu-principal {
+  background-color: var(--color-primario);
+  padding: 15px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header.menu-principal .logo {
+  color: white;
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+header.menu-principal nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: 500;
+}
+
+header.menu-principal nav a:hover {
+  color: var(--color-secundario);
+}
+
+main {
+  padding: 30px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+footer.pie-pagina {
+  text-align: center;
+  padding: 15px;
+  color: #777777;
+  font-size: 0.85rem;
+}
