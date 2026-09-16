@@ -12,32 +12,22 @@ const ultimaPartida = JSON.parse(localStorage.getItem("ultimaPartida")) || {
   definicion: "Todavía no has jugado ninguna partida."
 };
 
-// --- Historial real guardado por el juego ---
-const historial = JSON.parse(localStorage.getItem("historialPartidas")) || [];
-
-// --- Cambia la cara del gato según el resultado ---
 function actualizarGato(gano) {
   const tarjeta = document.getElementById("tarjeta-resultado");
   const titulo = document.getElementById("titulo-resultado");
   const mensaje = document.getElementById("mensaje-gato");
-  const parpadoIzq = document.getElementById("parpado-izq");
-  const parpadoDer = document.getElementById("parpado-der");
-  const boca = document.getElementById("boca");
+  const gato = document.getElementById("gato");
 
   if (gano) {
     tarjeta.classList.remove("perdio");
     titulo.textContent = "¡Ganaste!";
     mensaje.textContent = "¡Muy bien! Adivinaste la palabra sin problema.";
-    parpadoIzq.setAttribute("height", "0");
-    parpadoDer.setAttribute("height", "0");
-    boca.setAttribute("d", "M85,108 Q100,120 115,108");
+    gato.src = "imagenes/feliz.png";
   } else {
     tarjeta.classList.add("perdio");
     titulo.textContent = "¡Casi!";
     mensaje.textContent = "No pasa nada, así se aprende. Inténtalo otra vez.";
-    parpadoIzq.setAttribute("height", "18");
-    parpadoDer.setAttribute("height", "18");
-    boca.setAttribute("d", "M85,118 Q100,106 115,118");
+    gato.src = "imagenes/trsite.png";
   }
 }
 
