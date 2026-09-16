@@ -1,9 +1,3 @@
-// ============================================
-//  Lógica de la página de CATEGORÍAS
-//  Las tarjetas ya están fijas en el HTML;
-//  aquí solo manejamos el comportamiento.
-// ============================================
-
 // --- Al hacer clic en una tarjeta, guarda la categoría y va al juego ---
 function activarTarjetas() {
   const tarjetas = document.querySelectorAll(".tarjeta-categoria");

@@ -1,9 +1,3 @@
-// ============================================
-//  Lógica de la página de RESULTADOS
-//  Ahora lee los datos reales guardados por
-//  juego.js en localStorage.
-// ============================================
-
 // --- Datos de la última partida (o valores por defecto si aún no ha jugado) ---
 const ultimaPartida = JSON.parse(localStorage.getItem("ultimaPartida")) || {
   gano: true,
@@ -110,7 +104,6 @@ function mostrarHistorial() {
   });
 }
 
-// --- Arranque de la página ---
 mostrarResultado();
 mostrarEstadisticas();
 mostrarHistorial();

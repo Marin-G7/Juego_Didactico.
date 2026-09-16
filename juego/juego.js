@@ -1,7 +1,3 @@
-// ============================================
-//  Lógica del JUEGO (Ahorcado)
-// ============================================
-
 const bancoPalabras = {
   animales: [
     { palabra: "MURCIELAGO", definicion: "Mamífero volador nocturno que se orienta usando el eco de sus propios sonidos." },

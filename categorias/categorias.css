@@ -1,7 +1,3 @@
-/* ============================================
-   Estilos propios de la página de CATEGORÍAS
-   ============================================ */
-
 #lista-categorias {
   display: flex;
   flex-wrap: wrap;
