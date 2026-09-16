@@ -1,15 +1,115 @@
-/* Estilos propios de la página de JUEGO.
-   Libertad total aquí: colores, tamaños, animaciones... */
+/* ============================================
+   Estilos propios de la página de JUEGO
+   ============================================ */
 
-#palabra-oculta {
-  font-size: 2rem;
-  letter-spacing: 8px;
+.tarjeta-juego {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 25px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.zona-dibujo {
+  flex: 0 0 200px;
   text-align: center;
 }
 
+.dibujo-ahorcado {
+  width: 190px;
+  height: 190px;
+}
+
+.zona-palabra {
+  flex: 1;
+  min-width: 240px;
+}
+
+.categoria-actual {
+  color: #118ab2;
+  font-weight: bold;
+  margin-top: 0;
+}
+
+#palabra-oculta {
+  font-size: 2.2rem;
+  letter-spacing: 8px;
+  font-weight: bold;
+  color: #22223b;
+}
+
+#mensaje-estado {
+  min-height: 24px;
+  font-weight: bold;
+  color: #06997a;
+}
+
+#intentos-restantes {
+  color: #ef476f;
+}
+
+.oculto {
+  display: none;
+}
+
+.boton {
+  display: inline-block;
+  padding: 12px 22px;
+  border-radius: 30px;
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: bold;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+  transition: transform 0.15s;
+}
+
+.boton:hover {
+  transform: translateY(-3px);
+}
+
+.boton-verde {
+  background-color: #06d6a0;
+}
+
+/* ---------- Teclado ---------- */
 #teclado-letras {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
+  gap: 8px;
+  margin-top: 25px;
+}
+
+#teclado-letras button {
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 10px;
+  background-color: #ffd166;
+  color: #22223b;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.15);
+  transition: transform 0.1s;
+}
+
+#teclado-letras button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+#teclado-letras button.correcta {
+  background-color: #06d6a0;
+  color: #ffffff;
+}
+
+#teclado-letras button.incorrecta {
+  background-color: #ef476f;
+  color: #ffffff;
+}
+
+#teclado-letras button:disabled {
+  cursor: not-allowed;
+  opacity: 0.75;
 }

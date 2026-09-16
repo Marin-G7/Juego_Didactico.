@@ -1,12 +1,54 @@
-/* Estilos propios de la página de CATEGORÍAS.
-   Libertad total aquí: colores, tamaños, tarjetas... */
+/* ============================================
+   Estilos propios de la página de CATEGORÍAS
+   ============================================ */
 
 #lista-categorias {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 18px;
+  margin: 20px 0 35px;
+}
+
+.tarjeta-categoria {
+  flex: 1;
+  min-width: 160px;
+  border-radius: 16px;
+  padding: 22px 18px;
+  text-align: center;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+  transition: transform 0.15s;
+}
+
+.tarjeta-categoria:hover {
+  transform: translateY(-4px);
+}
+
+.tarjeta-categoria h3 {
+  margin: 0 0 6px 0;
+  font-size: 1.3rem;
+}
+
+.cantidad-palabras {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.caja-amarilla { background-color: #ffb703; }
+.caja-verde    { background-color: #06d6a0; }
+.caja-rosa     { background-color: #ef476f; }
+.caja-azul     { background-color: #118ab2; }
+
+#ranking {
+  list-style: none;
+  padding: 0;
 }
 
 #ranking li {
-  padding: 4px 0;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }

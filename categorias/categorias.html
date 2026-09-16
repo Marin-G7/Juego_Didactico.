@@ -20,19 +20,23 @@
   </header>
 
   <main>
-    <h1>Categorías</h1>
-
-    <!-- ZONA LIBRE: aquí va todo lo de categorías/dificultad/ranking.
-         Puedes cambiar el diseño como quieras,
-         solo mantén el menú y el pie de página. -->
+    <h1>Elige una categoría</h1>
 
     <div id="lista-categorias">
-      <!-- TODO: tarjetas o lista de categorías disponibles -->
+      <div class="tarjeta-categoria caja-verde" data-categoria="animales">
+        <h3>Animales</h3>
+        <span class="cantidad-palabras">2 palabras</span>
+      </div>
+
+      <div class="tarjeta-categoria caja-azul" data-categoria="tecnologia">
+        <h3>Tecnología</h3>
+        <span class="cantidad-palabras">2 palabras</span>
+      </div>
     </div>
 
     <h2>Mejores puntajes</h2>
     <ol id="ranking">
-      <!-- TODO: ranking de mejores puntajes -->
+      <!-- lo llena categorias.js -->
     </ol>
 
     <script src="categorias.js"></script>

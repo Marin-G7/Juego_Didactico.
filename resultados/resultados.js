@@ -1,24 +1,19 @@
 // ============================================
 //  Lógica de la página de RESULTADOS
-//  Datos de ejemplo por ahora: cuando el juego
-//  esté listo, se reemplazan por los reales.
+//  Ahora lee los datos reales guardados por
+//  juego.js en localStorage.
 // ============================================
 
-// --- Datos de ejemplo de la última partida ---
-const ultimaPartida = {
+// --- Datos de la última partida (o valores por defecto si aún no ha jugado) ---
+const ultimaPartida = JSON.parse(localStorage.getItem("ultimaPartida")) || {
   gano: true,
-  palabra: "MURCIÉLAGO",
-  categoria: "Animales",
-  definicion: "Mamífero volador nocturno que se orienta usando el eco de sus propios sonidos."
+  palabra: "SIN DATOS",
+  categoria: "-",
+  definicion: "Todavía no has jugado ninguna partida."
 };
 
-// --- Historial de ejemplo ---
-const historial = [
-  { palabra: "MURCIÉLAGO", categoria: "Animales",   gano: true },
-  { palabra: "TECLADO",    categoria: "Tecnología", gano: true },
-  { palabra: "JIRAFA",     categoria: "Animales",   gano: false },
-  { palabra: "SERVIDOR",   categoria: "Tecnología", gano: true }
-];
+// --- Historial real guardado por el juego ---
+const historial = JSON.parse(localStorage.getItem("historialPartidas")) || [];
 
 // --- Cambia la cara del gato según el resultado ---
 function actualizarGato(gano) {
@@ -57,11 +52,24 @@ function mostrarResultado() {
 // --- Calcula y muestra las estadísticas ---
 function mostrarEstadisticas() {
   const jugadas = historial.length;
+
+  if (jugadas === 0) {
+    document.getElementById("stat-jugadas").textContent = 0;
+    document.getElementById("stat-ganadas").textContent = 0;
+    document.getElementById("stat-racha").textContent = 0;
+    document.getElementById("stat-porcentaje").textContent = "0%";
+
+    const barra = document.getElementById("barra-progreso");
+    barra.style.width = "0%";
+    barra.textContent = "0%";
+    return;
+  }
+
   const ganadas = historial.filter(p => p.gano).length;
   const porcentaje = Math.round((ganadas / jugadas) * 100);
 
   let racha = 0;
-  for (let i = 0; i < historial.length; i++) {
+  for (let i = historial.length - 1; i >= 0; i--) {
     if (historial[i].gano) {
       racha++;
     } else {
@@ -84,7 +92,14 @@ function mostrarHistorial() {
   const lista = document.getElementById("historial-partidas");
   lista.innerHTML = "";
 
-  historial.forEach(function (partida) {
+  if (historial.length === 0) {
+    const item = document.createElement("li");
+    item.textContent = "Todavía no has jugado ninguna partida.";
+    lista.appendChild(item);
+    return;
+  }
+
+  historial.slice().reverse().forEach(function (partida) {
     const item = document.createElement("li");
 
     const texto = document.createElement("span");
