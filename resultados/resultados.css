@@ -1,12 +1,201 @@
-/* Estilos propios de la página de RESULTADOS.
-   Libertad total aquí: colores, tamaños, gráficos... */
+/* ============================================
+   Estilos propios de la página de RESULTADOS
+   Gato naranja + paleta ámbar/verde/rosa/azul
+   ============================================ */
 
-#resumen-partida {
-  font-size: 1.3rem;
+main {
+  padding-bottom: 40px;
+}
+
+/* ---------- Tarjeta principal ---------- */
+.tarjeta-resultado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 25px;
+  background: linear-gradient(135deg, #ffd166 0%, #ff8c42 100%);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.tarjeta-resultado.perdio {
+  background: linear-gradient(135deg, #ff9a5a 0%, #c1521c 100%);
+}
+
+.zona-gato {
+  flex: 0 0 190px;
+  text-align: center;
+}
+
+.gato {
+  width: 180px;
+  height: 180px;
+  animation: flotar 3s ease-in-out infinite;
+}
+
+@keyframes flotar {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+.zona-mensaje {
+  flex: 1;
+  min-width: 260px;
+}
+
+#titulo-resultado {
+  margin: 0 0 10px 0;
+  font-size: 2.4rem;
+  color: #22223b;
+}
+
+.globo-texto {
+  background-color: #ffffff;
+  border-radius: 18px;
+  padding: 14px 18px;
+  font-size: 1.05rem;
+  color: #22223b;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dato-palabra {
+  margin: 8px 0;
+  font-size: 1.05rem;
+  color: #22223b;
+}
+
+/* ---------- Botones ---------- */
+.botones {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.boton {
+  display: inline-block;
+  padding: 12px 22px;
+  border-radius: 30px;
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: bold;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+  transition: transform 0.15s;
+}
+
+.boton:hover {
+  transform: translateY(-3px);
+}
+
+.boton-verde { background-color: #06d6a0; }
+.boton-azul  { background-color: #118ab2; }
+
+/* ---------- Bloque didáctico ---------- */
+.bloque-aprendizaje {
+  background-color: #ffffff;
+  border-left: 8px solid #06d6a0;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 30px;
+}
+
+.bloque-aprendizaje h2 {
+  margin-top: 0;
+  color: #06997a;
+}
+
+.tip {
+  background-color: #fff3cd;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 0.95rem;
+  color: #8a5a00;
+}
+
+/* ---------- Estadísticas ---------- */
+.bloque-stats {
+  margin-top: 30px;
+}
+
+.cajas-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.caja-stat {
+  flex: 1;
+  min-width: 130px;
+  border-radius: 16px;
+  padding: 18px;
+  text-align: center;
+  color: #ffffff;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+}
+
+.caja-stat .numero {
+  display: block;
+  font-size: 2.2rem;
   font-weight: bold;
 }
 
+.caja-stat .etiqueta {
+  font-size: 0.9rem;
+}
+
+.caja-amarilla { background-color: #ffb703; }
+.caja-verde    { background-color: #06d6a0; }
+.caja-rosa     { background-color: #ef476f; }
+.caja-azul     { background-color: #118ab2; }
+
+/* ---------- Barra de progreso ---------- */
+.barra-fondo {
+  background-color: #f0e6d6;
+  border-radius: 20px;
+  overflow: hidden;
+  height: 28px;
+}
+
+.barra-llena {
+  background: linear-gradient(90deg, #ffb703, #06d6a0);
+  height: 100%;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 0.9rem;
+  text-align: right;
+  padding-right: 10px;
+  line-height: 28px;
+  transition: width 0.8s ease;
+}
+
+/* ---------- Historial ---------- */
+.bloque-historial {
+  margin-top: 30px;
+}
+
+#historial-partidas {
+  list-style: none;
+  padding: 0;
+}
+
 #historial-partidas li {
-  padding: 6px 0;
-  border-bottom: 1px solid #dddddd;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.marca-gano {
+  color: #06d6a0;
+  font-weight: bold;
+}
+
+.marca-perdio {
+  color: #ef476f;
+  font-weight: bold;
 }
