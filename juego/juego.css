@@ -5,9 +5,10 @@
   align-items: center;
   gap: 25px;
   background-color: #ffffff;
-  border-radius: 20px;
+  border: 1px solid rgba(36, 59, 112, 0.08);
+  border-radius: var(--radio-grande);
   padding: 25px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--sombra-tarjeta);
 }
 
 .zona-dibujo {
@@ -26,14 +27,25 @@
 }
 
 .categoria-actual {
-  color: #118ab2;
+  color: #2469a3;
   font-weight: bold;
   margin-top: 0;
 }
 
+.definicion-pista {
+  max-width: 620px;
+  min-height: 48px;
+  padding: 12px 16px;
+  border-left: 4px solid #ffbf4a;
+  border-radius: 0 12px 12px 0;
+  color: #495674;
+  background: #fff8e9;
+}
+
 #palabra-oculta {
   font-size: 2.2rem;
-  letter-spacing: 8px;
+  letter-spacing: 0.22em;
+  overflow-wrap: anywhere;
   font-weight: bold;
   color: #22223b;
 }
@@ -52,6 +64,8 @@
   display: none;
 }
 
+.ayuda-teclado { margin: 14px 0 0; color: #64708d; font-size: 0.9rem; text-align: center; }
+
 .boton {
   display: inline-block;
   padding: 12px 22px;
@@ -68,7 +82,7 @@
 }
 
 .boton-verde {
-  background-color: #06d6a0;
+  background: linear-gradient(135deg, #079b76, #11c69a);
 }
 
 /* ---------- Teclado ---------- */
@@ -77,6 +91,17 @@
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 25px;
+}
+
+#teclado-letras button:focus-visible { outline: 3px solid #243b70; outline-offset: 2px; }
+
+@media (max-width: 600px) {
+  .tarjeta-juego { padding: 18px; gap: 14px; }
+  .zona-dibujo { flex-basis: 100%; }
+  .dibujo-ahorcado { width: 155px; height: 155px; }
+  #palabra-oculta { font-size: clamp(1.25rem, 7vw, 2rem); letter-spacing: 0.13em; }
+  #teclado-letras { justify-content: center; gap: 7px; }
+  #teclado-letras button { width: 38px; height: 40px; }
 }
 
 #teclado-letras button {
@@ -110,3 +135,26 @@
   cursor: not-allowed;
   opacity: 0.75;
 }
+
+.turno-actual { display: inline-block; margin: 0 0 12px; padding: 7px 12px; border-radius: 999px; color: #fff; background: var(--color-violeta); font-weight: 800; }
+.puntuacion-ronda { display: inline-block; padding: 7px 12px; border-radius: 999px; color: #5e4300; background: #fff0bd; font-weight: 800; }
+.zona-pistas { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; }
+.boton-pista { min-height: 44px; padding: 10px 14px; border: 2px solid #7657e8; border-radius: 14px; color: #49359c; background: #f1edff; font: inherit; font-weight: 800; cursor: pointer; transition: transform .18s, background .18s; }
+.boton-pista span { font-size: .84rem; }
+.boton-pista:hover:not(:disabled) { transform: translateY(-2px); background: #e6ddff; }
+.boton-pista:disabled { opacity: .5; cursor: not-allowed; }
+.acciones-juego { display: flex; flex-wrap: wrap; gap: 10px; }
+.acciones-juego button { border: 0; font: inherit; cursor: pointer; }
+.boton-azul { color: #fff; background: linear-gradient(135deg, #5740aa, #8468e8); }
+#teclado-letras button.revelada { outline: 3px solid #7657e8; outline-offset: 1px; }
+.mascota-juego { flex: 0 0 165px; align-self: center; margin: 0 auto; padding: 12px; border: 3px solid #fff; border-radius: 24px; background: linear-gradient(150deg, #fff1bf, #f0eaff); box-shadow: 0 12px 28px rgba(48, 37, 95, .15); text-align: center; }
+.gato-reaccion { display: block; width: 100%; height: 150px; border-radius: 15px; object-fit: contain; filter: drop-shadow(0 5px 5px rgba(30, 20, 50, .16)); animation: rebote-gato .45s ease both; }
+.mascota-juego figcaption { margin-top: 7px; color: #49359c; font-size: .86rem; font-weight: 800; }
+@keyframes rebote-gato { 0% { transform: scale(.92) rotate(-2deg); } 65% { transform: scale(1.04) rotate(2deg); } 100% { transform: scale(1); } }
+@media(max-width: 650px) { .mascota-juego { display: flex; align-items: center; gap: 10px; flex: 1 1 100%; } .gato-reaccion { width: 104px; height: 104px; flex: 0 0 104px; } .mascota-juego figcaption { text-align: left; } .zona-pistas { display: grid; grid-template-columns: 1fr; } }
+.mascota-juego[data-reaccion="indiferente"] .gato-reaccion { height: 110px; object-fit: cover; object-position: center 20%; }
+.mascota-juego[data-reaccion="acierto"] .gato-reaccion { clip-path: inset(0 10% 8% 0 round 15px); }
+@media(max-width:650px) {
+  .mascota-juego[data-reaccion="indiferente"] .gato-reaccion { height: 78px; }
+}
+.gato-reaccion.animar-reaccion { animation: rebote-gato .45s ease both; }

@@ -13,7 +13,7 @@
     <span class="logo">Ahorcado Educativo</span>
     <nav>
       <a href="../index.html">Inicio</a>
-      <a href="juego.html">Jugar</a>
+      <a href="../categorias/categorias.html">Jugar</a>
       <a href="../resultados/resultados.html">Resultados</a>
       <a href="../categorias/categorias.html">Categorías</a>
     </nav>
@@ -41,13 +41,27 @@
       </div>
 
       <div class="zona-palabra">
+        <p id="turno-actual" class="turno-actual oculto"></p>
         <p class="categoria-actual">Categoría: <strong id="categoria-juego">-</strong></p>
+        <p id="definicion-pista" class="definicion-pista" aria-live="polite">Adivina la palabra para descubrir su definición.</p>
         <p id="palabra-oculta">_ _ _ _ _</p>
-        <p id="mensaje-estado"></p>
+        <p id="mensaje-estado" aria-live="polite"></p>
         <p id="intentos-restantes">Intentos restantes: <strong id="numero-intentos">6</strong></p>
-
-        <a href="../resultados/resultados.html" id="btn-ver-resultado" class="boton boton-verde oculto">Ver resultado</a>
+        <p id="puntuacion-ronda" class="puntuacion-ronda oculto"></p>
+        <div class="zona-pistas" aria-label="Pistas con costo en intentos">
+          <button type="button" id="btn-pista-definicion" class="boton-pista">Ver definición <span>(−1 intento)</span></button>
+          <button type="button" id="btn-pista-letra" class="boton-pista">Revelar una letra <span>(−2 intentos)</span></button>
+        </div>
+        <div class="acciones-juego">
+          <a href="../resultados/resultados.html" id="btn-ver-resultado" class="boton boton-verde oculto">Ver resultado</a>
+          <button type="button" id="btn-siguiente-turno" class="boton boton-azul oculto">Pasar al siguiente jugador</button>
+        </div>
       </div>
+
+      <figure class="mascota-juego">
+        <img id="gato-juego" src="../assets/gato/pensando.png" alt="Gato pensando" class="gato-reaccion">
+        <figcaption id="texto-gato-juego">¡A ver si encuentras la palabra!</figcaption>
+      </figure>
 
     </section>
 
@@ -81,6 +95,9 @@
       <button data-letra="Z">Z</button>
     </div>
 
+    <p class="ayuda-teclado">Consejo: también puedes usar las letras de tu teclado.</p>
+
+    <script src="../banco-palabras.js"></script>
     <script src="juego.js"></script>
   </main>
 

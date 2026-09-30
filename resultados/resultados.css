@@ -195,3 +195,54 @@ main {
   color: #ef476f;
   font-weight: bold;
 }
+
+/* Ajustes de presentación y lectura en pantallas pequeñas. */
+.tarjeta-resultado {
+  border: 1px solid rgba(36, 59, 112, 0.06);
+  box-shadow: var(--sombra-tarjeta);
+}
+
+.tarjeta-resultado.perdio {
+  background: linear-gradient(135deg, #ffe0c8 0%, #ff9e83 100%);
+}
+
+.bloque-aprendizaje,
+.bloque-stats,
+.bloque-historial {
+  animation: aparecer 0.5s ease both;
+}
+
+.bloque-stats { animation-delay: 0.08s; }
+.bloque-historial { animation-delay: 0.14s; }
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .tarjeta-resultado { padding: 20px; gap: 14px; }
+  .zona-gato { flex: 1 1 100%; }
+  .gato { width: 145px; height: 145px; }
+  #titulo-resultado { font-size: 2rem; }
+  #historial-partidas li { gap: 10px; align-items: flex-start; }
+  .caja-stat { min-width: 42%; }
+}
+.caja-amarilla { background: linear-gradient(135deg, #b66a00, #e69a21); }
+.caja-verde { background: linear-gradient(135deg, #07866d, #18b7a2); }
+.caja-rosa { background: linear-gradient(135deg, #b73471, #ed5a9b); }
+.caja-azul { background: linear-gradient(135deg, #2469a3, #408fe1); }
+.tarjeta-resultado { background: linear-gradient(135deg, #fff0bd 0%, #ffc857 100%); }
+.tarjeta-resultado.perdio { background: linear-gradient(135deg, #ffd7e2 0%, #ff879c 100%); }
+.zona-gato { padding: 12px; border: 3px solid rgba(255,255,255,.9); border-radius: 30px; background: rgba(255,255,255,.62); }
+.gato { width: 200px; height: 200px; border-radius: 20px; object-fit: contain; animation: rebote-gato .45s ease both; }
+.boton { border: 0; cursor: pointer; font: inherit; }
+.boton-azul { color: #fff; background: linear-gradient(135deg, #5740aa, #8468e8); }
+.boton-reset { margin-top: 15px; color: #49359c; background: #eeeafd; box-shadow: none; }
+.boton-reset:hover { background: #e1d9fb; }
+#marcador-jugadores { display: grid; gap: 9px; padding-left: 22px; }
+.fila-marcador { display: flex; justify-content: space-between; padding: 13px 16px; border-radius: 14px; background: #fff; box-shadow: 0 5px 18px rgba(48,37,95,.08); }
+.fila-marcador strong { color: #7657e8; }
+@media(max-width:600px) { .cajas-stats { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); } .caja-stat { min-width: 0; } .zona-gato { margin: 0 auto; } .gato { width: 145px; height: 145px; } }
+.gato.animar-reaccion { animation: rebote-gato .45s ease both; }
+.nota-sesion { margin: 8px 0 15px; color: var(--color-suave); font-size: .92rem; }

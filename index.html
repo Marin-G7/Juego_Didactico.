@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ahorcado Educativo - Inicio</title>
   <link rel="stylesheet" href="estilos-generales.css">
+  <link rel="stylesheet" href="inicio.css">
 </head>
 <body>
 
@@ -13,31 +14,31 @@
     <span class="logo">Ahorcado Educativo</span>
     <nav>
       <a href="index.html">Inicio</a>
-      <a href="juego/juego.html">Jugar</a>
+      <a href="categorias/categorias.html">Jugar</a>
       <a href="resultados/resultados.html">Resultados</a>
       <a href="categorias/categorias.html">Categorías</a>
     </nav>
   </header>
 
   <main>
-    <h1>¡Bienvenido al Ahorcado Educativo!</h1>
+    <section class="portada">
+      <div class="portada-texto">
+        <span class="etiqueta-portada">APRENDE JUGANDO</span>
+        <h1>¿Qué palabra se esconde?</h1>
+        <p>Elige un tema, prueba tus letras y descubre datos nuevos en cada partida. Cada error te acerca un poco más al dibujo… ¿podrás resolverla?</p>
+        <a class="boton-inicio" href="categorias/categorias.html">Elegir categoría <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="portada-ilustracion"><img src="assets/gato/normal.png" alt="Gato negro orgulloso y listo para jugar"><span aria-hidden="true">✦</span></div>
+    </section>
 
-   
-    <p>
-      Practica vocabulario de una forma diferente. Elige una categoría,
-      adivina la palabra oculta letra por letra y pon a prueba lo que sabes.
-    </p>
-
-    <h2>¿Cómo se juega?</h2>
-    <ol>
-      <li>Escoge una categoría de palabras.</li>
-      <li>Adivina la palabra oculta escribiendo una letra a la vez.</li>
-      <li>Cuidado: cada error te acerca a perder la partida.</li>
-    </ol>
-
-    <p>
-      <a href="juego/juego.html">Empezar a jugar →</a>
-    </p>
+    <section class="como-jugar">
+      <h2>Una partida en tres pasos</h2>
+      <div class="pasos">
+        <article><span>01</span><h3>Elige un tema</h3><p>Animales o tecnología: escoge lo que más te guste.</p></article>
+        <article><span>02</span><h3>Prueba tus letras</h3><p>Usa el teclado de la pantalla o el teclado de tu computador.</p></article>
+        <article><span>03</span><h3>Descubre y aprende</h3><p>Resuelve la palabra y lee su definición al terminar.</p></article>
+      </div>
+    </section>
   </main>
 
   <footer class="pie-pagina">

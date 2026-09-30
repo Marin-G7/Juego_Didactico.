@@ -1,58 +1,109 @@
-
 :root {
-  --color-primario: #2e5c8a;
-  --color-secundario: #f4a300;
-  --color-fondo: #f7f7f7;
-  --color-texto: #222222;
+  --color-primario: #30255f;
+  --color-secundario: #ffc857;
+  --color-fondo: #f7f4ff;
+  --color-texto: #27223e;
+  --color-suave: #6d6884;
+  --color-superficie: #ffffff;
+  --color-violeta: #7657e8;
+  --color-turquesa: #18b7a2;
+  --color-coral: #f45b69;
   --fuente-principal: "Segoe UI", Arial, sans-serif;
+  --radio-grande: 24px;
+  --sombra-tarjeta: 0 14px 36px rgba(36, 59, 112, 0.12);
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
+  min-height: 100vh;
   margin: 0;
+  display: flex;
+  flex-direction: column;
   font-family: var(--fuente-principal);
-  background-color: var(--color-fondo);
   color: var(--color-texto);
+  background:
+    radial-gradient(ellipse at 8% 18%, rgba(255, 209, 102, 0.2), transparent 30%),
+    radial-gradient(ellipse at 92% 58%, rgba(6, 214, 160, 0.1), transparent 32%),
+    var(--color-fondo);
 }
 
-/* Menú de navegación compartido */
 header.menu-principal {
-  background-color: var(--color-primario);
-  padding: 15px 30px;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  padding: 15px max(24px, calc((100vw - 1120px) / 2));
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 20px;
+  color: white;
+  background: rgba(36, 59, 112, 0.96);
+  box-shadow: 0 4px 18px rgba(28, 43, 82, 0.14);
+  backdrop-filter: blur(12px);
 }
 
 header.menu-principal .logo {
   color: white;
-  font-weight: bold;
-  font-size: 1.3rem;
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
 }
+
+header.menu-principal nav { display: flex; flex-wrap: wrap; gap: 6px; }
 
 header.menu-principal nav a {
-  color: white;
+  padding: 9px 13px;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
-  margin-left: 20px;
-  font-weight: 500;
+  font-size: 0.93rem;
+  font-weight: 600;
+  transition: background-color 0.2s, color 0.2s, transform 0.2s;
 }
 
-header.menu-principal nav a:hover {
-  color: var(--color-secundario);
+header.menu-principal nav a:hover,
+header.menu-principal nav a:focus-visible {
+  color: var(--color-primario);
+  background: var(--color-secundario);
+  transform: translateY(-1px);
+  outline: none;
 }
 
 main {
-  padding: 30px;
-  max-width: 900px;
+  width: min(1080px, 100% - 40px);
   margin: 0 auto;
+  padding: clamp(32px, 6vw, 64px) 0;
+  flex: 1;
 }
 
-footer.pie-pagina {
+h1, h2, h3 { color: var(--color-primario); line-height: 1.15; }
+h1 { margin: 0 0 18px; font-size: clamp(2rem, 5vw, 3.3rem); letter-spacing: -0.035em; }
+h2 { margin: 38px 0 16px; font-size: clamp(1.4rem, 3vw, 2rem); }
+p, li { line-height: 1.7; }
+
+a, button { -webkit-tap-highlight-color: transparent; }
+a:focus-visible, button:focus-visible { outline: 3px solid #ffbf4a; outline-offset: 3px; }
+
+.pie-pagina {
+  padding: 20px;
+  color: var(--color-suave);
+  font-size: 0.9rem;
   text-align: center;
-  padding: 15px;
-  color: #777777;
-  font-size: 0.85rem;
 }
+
+@media (max-width: 680px) {
+  header.menu-principal { position: static; align-items: flex-start; flex-direction: column; padding: 16px 20px; gap: 10px; }
+  header.menu-principal nav { width: 100%; gap: 3px; }
+  header.menu-principal nav a { padding: 8px 10px; font-size: 0.88rem; }
+  main { width: min(100% - 28px, 1080px); padding: 34px 0 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+
+.oculto { display: none !important; }
+

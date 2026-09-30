@@ -21,24 +21,77 @@
 
   <main>
     <h1>Elige una categoría</h1>
+    <p class="intro-categorias">Escoge un tema y pon a prueba lo que sabes.</p>
+
+    <section class="seleccion-modo" aria-labelledby="titulo-modo">
+      <h2 id="titulo-modo">¿Cómo quieren jugar?</h2>
+      <div class="opciones-modo">
+        <button type="button" class="opcion-modo" data-modo="individual" aria-pressed="true">
+          <span aria-hidden="true">🙋</span><strong>Una persona</strong>
+          <small>Juega a tu ritmo</small>
+        </button>
+        <button type="button" class="opcion-modo" data-modo="duelo" aria-pressed="false">
+          <span aria-hidden="true">🎮</span><strong>Duelo local</strong>
+          <small>Dos personas, por turnos</small>
+        </button>
+      </div>
+      <div id="nombres-duelo" class="nombres-duelo oculto">
+        <label>Jugador 1<input id="nombre-jugador-1" maxlength="18" autocomplete="nickname" placeholder="Ej. Luna"></label>
+        <label>Jugador 2<input id="nombre-jugador-2" maxlength="18" autocomplete="nickname" placeholder="Ej. Alex"></label>
+        <p>Al terminar una palabra, se pasa el turno al siguiente jugador.</p>
+      </div>
+    </section>
 
     <div id="lista-categorias">
-      <div class="tarjeta-categoria caja-verde" data-categoria="animales">
-        <h3>Animales</h3>
-        <span class="cantidad-palabras">50 palabras</span>
-      </div>
+      <button type="button" class="tarjeta-categoria caja-verde" data-categoria="animales">
+        <span class="icono-categoria" aria-hidden="true">🐾</span>
+        <span class="nombre-categoria">Animales</span>
+        <span class="cantidad-palabras" data-cantidad>Palabras por descubrir</span>
+      </button>
 
-      <div class="tarjeta-categoria caja-azul" data-categoria="tecnologia">
-        <h3>Tecnología</h3>
-        <span class="cantidad-palabras">50 palabras</span>
-      </div>
+      <button type="button" class="tarjeta-categoria caja-azul" data-categoria="tecnologia">
+        <span class="icono-categoria" aria-hidden="true">💻</span>
+        <span class="nombre-categoria">Tecnología</span>
+        <span class="cantidad-palabras" data-cantidad>Palabras por descubrir</span>
+      </button>
+
+      <button type="button" class="tarjeta-categoria caja-rosa" data-categoria="musica">
+        <span class="icono-categoria" aria-hidden="true">🎵</span>
+        <span class="nombre-categoria">Música</span>
+        <span class="cantidad-palabras" data-cantidad>Palabras por descubrir</span>
+      </button>
+
+      <button type="button" class="tarjeta-categoria caja-violeta" data-categoria="videojuegos">
+        <span class="icono-categoria" aria-hidden="true">🕹️</span>
+        <span class="nombre-categoria">Videojuegos</span>
+        <span class="cantidad-palabras" data-cantidad>Palabras por descubrir</span>
+      </button>
+
+      <button type="button" class="tarjeta-categoria caja-amarilla" data-categoria="deportes">
+        <span class="icono-categoria" aria-hidden="true">⚽</span>
+        <span class="nombre-categoria">Deportes</span>
+        <span class="cantidad-palabras" data-cantidad>Palabras por descubrir</span>
+      </button>
+
+      <button type="button" class="tarjeta-categoria caja-menta" data-categoria="ciencia">
+        <span class="icono-categoria" aria-hidden="true">🔬</span>
+        <span class="nombre-categoria">Ciencia</span>
+        <span class="cantidad-palabras" data-cantidad>Palabras por descubrir</span>
+      </button>
+
+      <button type="button" class="tarjeta-categoria caja-coral" data-categoria="cultura">
+        <span class="icono-categoria" aria-hidden="true">📚</span>
+        <span class="nombre-categoria">Cultura general</span>
+        <span class="cantidad-palabras" data-cantidad>Palabras por descubrir</span>
+      </button>
     </div>
 
-    <h2>Mejores puntajes</h2>
+    <h2>Marcador de la sesión</h2>
     <ol id="ranking">
       <!-- lo llena categorias.js -->
     </ol>
 
+    <script src="../banco-palabras.js"></script>
     <script src="categorias.js"></script>
   </main>
 
