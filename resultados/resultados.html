@@ -13,7 +13,7 @@
     <span class="logo">Ahorcado Educativo</span>
     <nav>
       <a href="../index.html">Inicio</a>
-      <a href="../juego/juego.html">Jugar</a>
+      <a href="../categorias/categorias.html">Jugar</a>
       <a href="resultados.html">Resultados</a>
       <a href="../categorias/categorias.html">Categorías</a>
     </nav>
@@ -24,22 +24,22 @@
     <!-- ===== TARJETA PRINCIPAL CON LA CARICATURA ===== -->
     <section class="tarjeta-resultado" id="tarjeta-resultado">
 
-      <!-- La caricatura: un gato naranja profe que cambia de cara según el resultado -->
+      <!-- La mascota cambia de expresión según el resultado. -->
      <div class="zona-gato">
-  <img id="gato" src="imagenes/feliz.png" alt="Personaje del juego" class="gato">
+  <img id="gato" src="../assets/gato/normal.png" alt="Gato negro esperando a jugar" class="gato">
 </div>
       
 
       <div class="zona-mensaje">
-        <h1 id="titulo-resultado">¡Ganaste!</h1>
+        <h1 id="titulo-resultado">¡Empecemos a jugar!</h1>
         <p id="mensaje-gato" class="globo-texto">
-          ¡Muy bien! Adivinaste la palabra sin problema.
+          Cuando termines una partida, aquí encontrarás tu resultado y lo que aprendiste.
         </p>
         <p class="dato-palabra">
-          La palabra era: <strong id="palabra-final">MURCIÉLAGO</strong>
+          La palabra era: <strong id="palabra-final">Aún sin jugar</strong>
         </p>
         <p class="dato-palabra">
-          Categoría: <strong id="categoria-final">Animales</strong>
+          Categoría: <strong id="categoria-final">-</strong>
         </p>
 
         <div class="botones">
@@ -53,7 +53,7 @@
     <section class="bloque-aprendizaje">
       <h2>¿Qué aprendiste con esta palabra?</h2>
       <p id="definicion-palabra">
-        Mamífero volador nocturno que se orienta usando el eco de sus propios sonidos.
+        Juega una partida para descubrir la definición de una palabra.
       </p>
       
     </section>
@@ -63,35 +63,43 @@
       <h2>Tu progreso</h2>
       <div class="cajas-stats">
         <div class="caja-stat caja-amarilla">
-          <span class="numero" id="stat-jugadas">12</span>
+          <span class="numero" id="stat-jugadas">0</span>
           <span class="etiqueta">Partidas jugadas</span>
         </div>
         <div class="caja-stat caja-verde">
-          <span class="numero" id="stat-ganadas">8</span>
+          <span class="numero" id="stat-ganadas">0</span>
           <span class="etiqueta">Ganadas</span>
         </div>
         <div class="caja-stat caja-rosa">
-          <span class="numero" id="stat-racha">3</span>
-          <span class="etiqueta">Racha actual</span>
+          <span class="numero" id="stat-perdidas">0</span>
+          <span class="etiqueta">Perdidas</span>
         </div>
         <div class="caja-stat caja-azul">
-          <span class="numero" id="stat-porcentaje">67%</span>
-          <span class="etiqueta">Aciertos</span>
+          <span class="numero" id="stat-puntos">0</span>
+          <span class="etiqueta">Puntos de sesión</span>
         </div>
       </div>
 
-      <h3>Palabras que has dominado</h3>
+      <p class="nota-sesion">Este progreso dura mientras la pestaña esté abierta. Puedes reiniciarlo cuando quieras.</p>
+      <h3>Porcentaje de partidas ganadas</h3>
       <div class="barra-fondo">
-        <div class="barra-llena" id="barra-progreso" style="width: 67%;">67%</div>
+        <div class="barra-llena" id="barra-progreso" role="progressbar" aria-label="Porcentaje de partidas ganadas" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;">0%</div>
       </div>
     </section>
 
-    <!-- ===== HISTORIAL ===== -->
+    <section id="marcador-duelo" class="bloque-historial oculto" aria-labelledby="titulo-marcador">
+      <h2 id="titulo-marcador">Marcador del duelo</h2>
+      <ol id="marcador-jugadores"></ol>
+      <button type="button" id="btn-pasar-turno" class="boton boton-azul oculto">Pasar al siguiente jugador</button>
+    </section>
+
+    <!-- ===== HISTORIAL DE ESTA SESIÓN ===== -->
     <section class="bloque-historial">
       <h2>Últimas partidas</h2>
       <ul id="historial-partidas">
         <!-- lo llena resultados.js -->
       </ul>
+      <button type="button" id="btn-nueva-sesion" class="boton boton-reset">Borrar progreso y empezar de nuevo</button>
     </section>
 
   </main>

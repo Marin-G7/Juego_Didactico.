@@ -21,24 +21,93 @@
 
   <main>
     <h1>Elige una categoría</h1>
+    <p class="intro-categorias">Escoge un tema y pon a prueba lo que sabes.</p>
+
+    <section class="seleccion-modo" aria-labelledby="titulo-modo">
+      <h2 id="titulo-modo">¿Cómo quieren jugar?</h2>
+      <div class="opciones-modo">
+        <button type="button" class="opcion-modo" data-modo="individual" aria-pressed="true">
+          <span aria-hidden="true">🙋</span><strong>Aventura individual</strong>
+          <small>Juega a tu ritmo</small>
+        </button>
+        <button type="button" class="opcion-modo" data-modo="duelo" aria-pressed="false">
+          <span aria-hidden="true">🎏</span><strong>Equipo local</strong>
+          <small>De 2 a 10 jugadores, por turnos</small>
+        </button>
+        <button type="button" class="opcion-modo" data-modo="tiempo" aria-pressed="false">
+          <span aria-hidden="true">⏱️</span><strong>Contrarreloj</strong>
+          <small>Resuelve antes de que acabe el tiempo</small>
+        </button>
+      </div>
+      <div id="nombres-duelo" class="nombres-duelo oculto">
+        <label for="cantidad-jugadores">¿Cuántos jugarán?
+          <select id="cantidad-jugadores">
+            <option value="2">2 jugadores</option><option value="3">3 jugadores</option><option value="4">4 jugadores</option>
+            <option value="5">5 jugadores</option><option value="6">6 jugadores</option><option value="7">7 jugadores</option>
+            <option value="8">8 jugadores</option><option value="9">9 jugadores</option><option value="10">10 jugadores</option>
+          </select>
+        </label>
+        <div id="lista-nombres-jugadores" class="lista-nombres-jugadores"></div>
+        <p>Al terminar una palabra, se pasa el turno al siguiente jugador.</p>
+      </div>
+      <div id="ajustes-tiempo" class="ajustes-tiempo oculto">
+        <label for="duracion-tiempo">Tiempo por palabra
+          <select id="duracion-tiempo"><option value="30">30 segundos · rápido</option><option value="60" selected>60 segundos · normal</option><option value="90">90 segundos · tranquilo</option></select>
+        </label>
+        <p>El cronómetro comienza cuando aparece la palabra.</p>
+      </div>
+    </section>
 
     <div id="lista-categorias">
-      <div class="tarjeta-categoria caja-verde" data-categoria="animales">
-        <h3>Animales</h3>
-        <span class="cantidad-palabras">50 palabras</span>
-      </div>
+      <button type="button" class="tarjeta-categoria caja-verde" data-categoria="animales">
+        <span class="icono-categoria" aria-hidden="true">🐾</span>
+        <span class="nombre-categoria">Animales</span>
+        <span class="cantidad-palabras" data-cantidad>Palabras por descubrir</span>
+      </button>
 
-      <div class="tarjeta-categoria caja-azul" data-categoria="tecnologia">
-        <h3>Tecnología</h3>
-        <span class="cantidad-palabras">50 palabras</span>
-      </div>
+      <button type="button" class="tarjeta-categoria caja-azul" data-categoria="tecnologia">
+        <span class="icono-categoria" aria-hidden="true">💻</span>
+        <span class="nombre-categoria">Tecnología</span>
+        <span class="cantidad-palabras" data-cantidad>Palabras por descubrir</span>
+      </button>
+
+      <button type="button" class="tarjeta-categoria caja-rosa" data-categoria="musica">
+        <span class="icono-categoria" aria-hidden="true">🎵</span>
+        <span class="nombre-categoria">Música</span>
+        <span class="cantidad-palabras" data-cantidad>Palabras por descubrir</span>
+      </button>
+
+      <button type="button" class="tarjeta-categoria caja-violeta" data-categoria="videojuegos">
+        <span class="icono-categoria" aria-hidden="true">🕹️</span>
+        <span class="nombre-categoria">Videojuegos</span>
+        <span class="cantidad-palabras" data-cantidad>Palabras por descubrir</span>
+      </button>
+
+      <button type="button" class="tarjeta-categoria caja-amarilla" data-categoria="deportes">
+        <span class="icono-categoria" aria-hidden="true">⚽</span>
+        <span class="nombre-categoria">Deportes</span>
+        <span class="cantidad-palabras" data-cantidad>Palabras por descubrir</span>
+      </button>
+
+      <button type="button" class="tarjeta-categoria caja-menta" data-categoria="ciencia">
+        <span class="icono-categoria" aria-hidden="true">🔬</span>
+        <span class="nombre-categoria">Ciencia</span>
+        <span class="cantidad-palabras" data-cantidad>Palabras por descubrir</span>
+      </button>
+
+      <button type="button" class="tarjeta-categoria caja-coral" data-categoria="cultura">
+        <span class="icono-categoria" aria-hidden="true">📚</span>
+        <span class="nombre-categoria">Cultura general</span>
+        <span class="cantidad-palabras" data-cantidad>Palabras por descubrir</span>
+      </button>
     </div>
 
-    <h2>Mejores puntajes</h2>
+    <h2>Marcador de la sesión</h2>
     <ol id="ranking">
       <!-- lo llena categorias.js -->
     </ol>
 
+    <script src="../banco-palabras.js"></script>
     <script src="categorias.js"></script>
   </main>
 
