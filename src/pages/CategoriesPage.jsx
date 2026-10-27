@@ -6,7 +6,8 @@ const modos = [
   { id: "duelo", icon: "🎏", title: "Equipo local", note: "De 2 a 10 por turnos" },
   { id: "tiempo", icon: "⏱️", title: "Contrarreloj", note: "Resuelve antes de que acabe" }
 ];
-const colores = ["sakura", "indigo", "mango", "matcha", "violet", "coral", "sky"];
+const colores = ["sakura", "indigo", "mango", "matcha", "violet", "coral", "sky", "plum", "mint", "sunset"];
+const iconosCategoria = ["🐾", "💻", "🎵", "🕹️", "⚽", "🔬", "📚", "🌸", "🍜", "🗺️"];
 
 export default function CategoriesPage() {
   const { mode, setMode, duration, setDuration, players, updatePlayers, categories, startRound, scores } = useGame();
@@ -58,8 +59,8 @@ export default function CategoriesPage() {
           </select>
         </label>
         <div className="player-fields">
-          {Array.from({ length: count }, (_, index) => <label className="form-field" key={index}>Jugador {index + 1}
-            <input value={draftNames[index] || ""} maxLength={18} placeholder={["Ej. Luna", "Ej. Alex", "Ej. Sakura", "Ej. Ken"][index % 4]} onChange={event => updateName(index, event.target.value)} />
+          {Array.from({ length: count }, (_, index) => <label className="form-field" key={index}>Nombre del jugador {index + 1}
+            <input value={draftNames[index] || ""} maxLength={18} aria-label={`Nombre del jugador ${index + 1}`} placeholder={["Ej. Luna", "Ej. Alex", "Ej. Sakura", "Ej. Ken"][index % 4]} onChange={event => updateName(index, event.target.value)} />
           </label>)}
         </div>
         <p className="helper-copy">Se turnan para resolver palabras. Las victorias suman puntos en el marcador de esta sesión.</p>
@@ -77,8 +78,8 @@ export default function CategoriesPage() {
     <div className="category-heading"><h2>Escoge el tema</h2><span>Hay {categories.length} mundos por descubrir</span></div>
     <div className="category-grid">
       {categories.map((category, index) => <button className={`category-card ${colores[index % colores.length]}`} type="button" key={category.id} onClick={() => start(category.id)}>
-        <span className="category-flower">✿</span><span className="category-symbol" aria-hidden="true">{["🐾", "💻", "🎵", "🕹️", "⚽", "🔬", "📚"][index % 7]}</span>
-        <strong>{category.name}</strong><small>{category.count} palabras</small><span className="category-arrow">Jugar <b>→</b></span>
+        <span className="category-flower">✿</span><span className="category-symbol" aria-hidden="true">{iconosCategoria[index % iconosCategoria.length]}</span>
+        <strong>{category.name || category.nombre || category.id}</strong><small>{category.count ?? category.cantidad ?? 0} palabras</small><span className="category-arrow">Jugar <b>→</b></span>
       </button>)}
     </div>
   </section>;

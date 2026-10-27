@@ -1,7 +1,7 @@
 import express from "express";
 import { ObjectId } from "mongodb";
 import { getDatabase, getRoundsCollection } from "./db.js";
-import datos from "./data/palabras.json" with { type: "json" };
+import datos from "../../src/data/palabras.json" with { type: "json" };
 
 const app = express();
 app.use(express.json({ limit: "20kb" }));
@@ -50,7 +50,7 @@ app.post("/api/partidas", async (request, response) => {
   try {
     const documento = {
       palabra, categoria, gano,
-      puntos: Math.max(0, Math.min(10000, Number(puntos))),
+      puntos: Math.max(0, Math.min(85, Number(puntos))),
       errores: Math.max(0, Math.min(6, Number(errores))),
       modo, jugador: jugador.trim() || "Jugador", jugadorId,
       tiempoRestante: request.body.tiempoRestante !== null && request.body.tiempoRestante !== undefined && Number.isFinite(Number(request.body.tiempoRestante))

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link, Navigate } from "react-router";
 import { useGame } from "../context/GameContext.jsx";
 import { CatReaction, HangmanDrawing } from "../components/SiteLayout.jsx";
+import { calculatePoints } from "../services/scoring.js";
 
 const alphabet = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
 const maxMistakes = 6;
@@ -11,7 +12,7 @@ function normalize(text) {
 }
 
 export default function GamePage() {
-  const { mode, duration, players, scores, currentPlayer, activeRound, finishRound, nextPlayer } = useGame();
+  const { mode, duration, players, scores, currentPlayer, activeRound, finishRound } = useGame();
   const [guessed, setGuessed] = useState(() => new Set());
   const [mistakes, setMistakes] = useState(0);
   const [seconds, setSeconds] = useState(duration);
@@ -27,6 +28,10 @@ export default function GamePage() {
   const normalizedWord = useMemo(() => normalize(activeRound?.palabra || ""), [activeRound]);
   const letters = useMemo(() => [...new Set([...normalizedWord].filter(letter => /[A-ZÑ]/.test(letter)))], [normalizedWord]);
   const playerName = mode === "duelo" ? players[currentPlayer] || `Jugador ${currentPlayer + 1}` : "Tú";
+  const rankedPlayers = players.map((name, index) => ({ name, points: Number(scores[index]) || 0 }))
+    .sort((a, b) => b.points - a.points);
+  const roundLeader = rankedPlayers[0];
+  const roundLeaders = rankedPlayers.filter(player => player.points === roundLeader?.points);
 
   const conclude = useCallback((won, timedOut = false) => {
     if (!activeRound || finishedRef.current) return;
@@ -36,10 +41,12 @@ export default function GamePage() {
     setReaction(won ? "orgulloso" : "derrota");
     setCatMessage(won ? "¡Qué jugada tan brillante!" : "El gato ya planea la revancha…");
     const finalMistakes = mistakesRef.current;
-    const points = won ? Math.max(0, 100 + (maxMistakes - finalMistakes) * 25 + activeRound.palabra.length * 5 + (mode === "tiempo" ? seconds * 2 : 0)) : 0;
+    const points = calculatePoints({ gano: won, errores: finalMistakes, modo: mode, tiempoRestante: seconds });
     finishRound({
       palabra: activeRound.palabra,
       definicion: activeRound.definicion,
+      datoCurioso: activeRound.datoCurioso,
+      fuenteDato: activeRound.fuenteDato,
       categoryId: activeRound.categoryId,
       categoriaNombre: activeRound.categoryName,
       gano: won,
@@ -90,6 +97,7 @@ export default function GamePage() {
   useEffect(() => {
     const handleKey = event => {
       if (event.ctrlKey || event.altKey || event.metaKey || event.repeat || !/^[a-zñ]$/i.test(event.key)) return;
+      if (event.target instanceof HTMLElement && event.target.closest("input, textarea, select, [contenteditable='true']")) return;
       event.preventDefault();
       guess(event.key);
     };
@@ -136,32 +144,43 @@ export default function GamePage() {
     if (!/[A-ZÑÁÉÍÓÚÜ]/i.test(letter)) return letter;
     return guessed.has(normalize(letter)) || finished ? letter : "_";
   }).join(" ");
+  const spokenWord = [...activeRound.palabra].map(letter => /[A-ZÑÁÉÍÓÚÜ]/i.test(letter)
+    ? guessed.has(normalize(letter)) || finished ? letter : "casilla oculta"
+    : letter).join(", ");
   const reactionName = mode === "tiempo" && seconds <= 10 && !finished ? "enojado" : reaction;
 
   return <section className="game-page">
     <div className="game-heading"><span className="eyebrow">🌸 {activeRound.categoryName.toLocaleUpperCase("es")} 🌸</span><h1>¡Adivina la palabra!</h1>
       {mode === "duelo" && <span className="turn-pill">🎏 Turno de {playerName}</span>}
-      {mode === "tiempo" && <span className={`timer-pill ${seconds <= 10 ? "urgent" : ""}`}>⏱️ {seconds} s</span>}
-      {mode === "duelo" && <span className="score-pill">Marcador: {players.map((name, index) => `${name} ${Number(scores[index]) || 0}`).join(" · ")}</span>}
+      {mode === "tiempo" && <span role="timer" aria-label={`Tiempo restante: ${seconds} segundos`} className={`timer-pill ${seconds <= 10 ? "urgent" : ""}`}>⏱️ {seconds} s</span>}
+      {mode === "duelo" && <div className="game-score-summary" aria-label="Resumen del marcador">
+        <span>⭐ {playerName}: {Number(scores[currentPlayer]) || 0} pts</span>
+        {roundLeader && (roundLeader.points === 0
+          ? <span>✨ Todavía no hay puntos</span>
+          : roundLeaders.length > 1
+            ? <span>🤝 Empate: {roundLeaders.map(player => player.name).join(" y ")}</span>
+            : <span>🏆 Va ganando {roundLeader.name}: {roundLeader.points} pts</span>)}
+        <Link to="/resultados">Ver marcador completo →</Link>
+      </div>}
     </div>
     <div className="game-layout">
       <section className="game-board">
-        <div className="hangman-stage"><HangmanDrawing mistakes={mistakes} /><div className="mistake-counter">Errores <strong>{mistakes}/{maxMistakes}</strong></div></div>
+        <div className="hangman-stage"><HangmanDrawing mistakes={mistakes} /><div className="mistake-counter" aria-live="polite" aria-atomic="true">Errores <strong>{mistakes}/{maxMistakes}</strong></div></div>
         <div className="play-area">
           <p className="category-label">Tema: <strong>{activeRound.categoryName}</strong></p>
           <div className="definition-box" aria-live="polite">{definitionHint || finished ? activeRound.definicion : "Adivina la palabra o usa una pista si la necesitas."}</div>
-          <p className="hidden-word" aria-label="Palabra oculta">{shownWord}</p>
+          <p className="hidden-word" aria-live="polite" aria-atomic="true"><span aria-hidden="true">{shownWord}</span><span className="visually-hidden">Palabra: {spokenWord}</span></p>
+          <p className="keyboard-help">⌨️ Usa las letras del teclado o toca una letra.</p>
           <p className="game-status" aria-live="polite">{status || " "}</p>
           <div className="hint-row">
             <button className="button button-soft" onClick={revealDefinition} disabled={definitionHint || finished}>💡 Ver definición <small>−1 intento</small></button>
             <button className="button button-soft" onClick={revealLetter} disabled={letterHint || finished}>🔎 Revelar letra <small>−2 intentos</small></button>
           </div>
-          <div className="letter-board" aria-label="Letras para adivinar">
-            {alphabet.map(letter => <button type="button" key={letter} onClick={() => guess(letter)} disabled={finished || guessed.has(letter)} className={`${guessed.has(letter) ? (letters.includes(letter) ? "letter-hit" : "letter-miss") : ""} ${letterHint && guessed.has(letter) && letters.includes(letter) ? "letter-revealed" : ""}`}>{letter}</button>)}
+          <div className="letter-board" role="group" aria-label="Letras para adivinar">
+            {alphabet.map(letter => <button type="button" key={letter} aria-label={`Probar la letra ${letter}`} aria-pressed={guessed.has(letter)} onClick={() => guess(letter)} disabled={finished || guessed.has(letter)} className={`${guessed.has(letter) ? (letters.includes(letter) ? "letter-hit" : "letter-miss") : ""} ${letterHint && guessed.has(letter) && letters.includes(letter) ? "letter-revealed" : ""}`}>{letter}</button>)}
           </div>
           <div className="round-actions">
             {finished && <Link className="button button-plum" to="/resultados">Ver resultado ✨</Link>}
-            {finished && mode === "duelo" && <button className="button button-mint" onClick={nextPlayer}>Siguiente jugador 🎏</button>}
           </div>
         </div>
         <CatReaction name={reactionName} caption={catMessage} className="game-cat" />

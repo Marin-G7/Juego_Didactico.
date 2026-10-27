@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { useNavigate } from "react-router";
 import datos from "../data/palabras.json";
 import { api } from "../services/api.js";
+import { calculatePoints } from "../services/scoring.js";
 
 const GameContext = createContext(null);
 const leerSesion = (clave, alternativa) => {
@@ -24,16 +25,30 @@ export function GameProvider({ children }) {
   const [mode, setModeState] = useState(() => sessionStorage.getItem("modoJuego") || "individual");
   const [duration, setDurationState] = useState(() => Number(sessionStorage.getItem("duracionTiempo")) || 60);
   const [players, setPlayers] = useState(() => leerSesion("nombresJugadores", ["Jugador 1", "Jugador 2"]));
-  const [scores, setScores] = useState(() => leerSesion("puntuacionJugadores", []));
+  const [scores, setScores] = useState(() => {
+    const previousScores = leerSesion("puntuacionJugadores", []);
+    const previousHistory = leerSesion("historialPartidas", []);
+    if (mode !== "duelo" || !previousHistory.length) return previousScores;
+    return players.map(name => previousHistory
+      .filter(round => round.jugador === name)
+      .reduce((total, round) => total + calculatePoints(round), 0));
+  });
   const [currentPlayer, setCurrentPlayer] = useState(() => Number(sessionStorage.getItem("indiceJugadorActual")) || 0);
   const [history, setHistory] = useState(() => leerSesion("historialPartidas", []));
-  const [latestResult, setLatestResult] = useState(() => leerSesion("ultimaPartida", null));
+  const [latestResult, setLatestResult] = useState(() => {
+    const previousResult = leerSesion("ultimaPartida", null);
+    return previousResult ? { ...previousResult, puntos: calculatePoints(previousResult) } : null;
+  });
   const [categoryId, setCategoryId] = useState(() => localStorage.getItem("categoriaSeleccionada") || "");
   const [activeRound, setActiveRound] = useState(null);
   const [saveNotice, setSaveNotice] = useState("");
   const [categories, setCategories] = useState(() => Object.entries(datos.nombresCategorias).map(([id, name]) => ({ id, name, count: datos.bancoPalabras[id]?.length || 0 })));
 
-  useEffect(() => { api.getCategories().then(setCategories).catch(() => {}); }, []);
+  useEffect(() => {
+    api.getCategories()
+      .then(items => setCategories(items.map(({ id, nombre, cantidad }) => ({ id, name: nombre, count: cantidad }))))
+      .catch(() => {});
+  }, []);
   useEffect(() => { sessionStorage.setItem("modoJuego", mode); }, [mode]);
   useEffect(() => { sessionStorage.setItem("duracionTiempo", String(duration)); }, [duration]);
   useEffect(() => { sessionStorage.setItem("nombresJugadores", JSON.stringify(players)); }, [players]);

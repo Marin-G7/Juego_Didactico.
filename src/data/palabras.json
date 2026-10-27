@@ -220,10 +220,6 @@
     ],
     "tecnologia": [
       {
-        "palabra": "TECLADO",
-        "definicion": "Periférico usado para introducir texto y comandos en una computadora."
-      },
-      {
         "palabra": "SERVIDOR",
         "definicion": "Computadora que provee servicios a otras computadoras conectadas en red."
       },
@@ -276,7 +272,7 @@
         "definicion": "Dispositivo que dirige el tráfico de datos entre redes."
       },
       {
-        "palabra": "MODEM",
+        "palabra": "MÓDEM",
         "definicion": "Dispositivo que convierte señales para permitir la conexión a internet."
       },
       {
@@ -286,10 +282,6 @@
       {
         "palabra": "USB",
         "definicion": "Puerto y estándar de conexión para transferir datos y energía."
-      },
-      {
-        "palabra": "PIXEL",
-        "definicion": "Unidad mínima de una imagen digital en una pantalla."
       },
       {
         "palabra": "BYTE",
@@ -320,7 +312,7 @@
         "definicion": "Conjunto de dispositivos conectados entre sí para compartir información."
       },
       {
-        "palabra": "CODIGO",
+        "palabra": "CÓDIGO",
         "definicion": "Conjunto de instrucciones escritas en un lenguaje de programación."
       },
       {
@@ -328,7 +320,7 @@
         "definicion": "Espacio con nombre usado para almacenar un valor en un programa."
       },
       {
-        "palabra": "FUNCION",
+        "palabra": "FUNCIÓN",
         "definicion": "Bloque de código reutilizable que realiza una tarea específica."
       },
       {
@@ -380,14 +372,6 @@
         "definicion": "Interfaz de texto usada para ejecutar comandos en una computadora."
       },
       {
-        "palabra": "CONSOLA",
-        "definicion": "Panel donde se muestran mensajes y resultados de un programa en ejecución."
-      },
-      {
-        "palabra": "PANTALLA",
-        "definicion": "Dispositivo que muestra imágenes e información de forma visual."
-      },
-      {
         "palabra": "TECLA",
         "definicion": "Botón de un teclado que representa una letra, número o función."
       },
@@ -412,7 +396,7 @@
         "definicion": "Dispositivo que capta el sonido y lo convierte en señal eléctrica."
       },
       {
-        "palabra": "BATERIA",
+        "palabra": "BATERÍA",
         "definicion": "Componente que almacena energía eléctrica para alimentar un dispositivo."
       },
       {
@@ -502,12 +486,40 @@
         "definicion": "Espacio elevado donde se presentan músicos y artistas."
       },
       {
-        "palabra": "MICRÓFONO",
-        "definicion": "Aparato que capta la voz para amplificarla o grabarla."
-      },
-      {
         "palabra": "BAILAR",
         "definicion": "Mover el cuerpo siguiendo el ritmo de la música."
+      },
+      {
+        "palabra": "BALADA",
+        "definicion": "Canción de ritmo pausado que suele contar una historia o expresar sentimientos."
+      },
+      {
+        "palabra": "ÓPERA",
+        "definicion": "Obra teatral en la que los personajes cantan con acompañamiento musical."
+      },
+      {
+        "palabra": "ARMONÍA",
+        "definicion": "Combinación de sonidos simultáneos que acompañan una melodía."
+      },
+      {
+        "palabra": "COMPOSITOR",
+        "definicion": "Persona que crea música o escribe una composición musical."
+      },
+      {
+        "palabra": "ENSAYO",
+        "definicion": "Práctica previa de una interpretación musical o escénica."
+      },
+      {
+        "palabra": "PERCUSIÓN",
+        "definicion": "Familia de instrumentos que producen sonido al golpearse, agitarse o rasparse."
+      },
+      {
+        "palabra": "ACÚSTICA",
+        "definicion": "Propiedad de una sala o espacio relacionada con cómo se propaga el sonido."
+      },
+      {
+        "palabra": "ESTROFA",
+        "definicion": "Parte de una canción formada por varios versos."
       }
     ],
     "videojuegos": [
@@ -582,6 +594,34 @@
       {
         "palabra": "TROFEO",
         "definicion": "Recompensa que reconoce un logro dentro de algunos videojuegos."
+      },
+      {
+        "palabra": "MULTIJUGADOR",
+        "definicion": "Modo de juego en el que participan varias personas."
+      },
+      {
+        "palabra": "INVENTARIO",
+        "definicion": "Espacio del juego donde se guardan objetos que recoge el personaje."
+      },
+      {
+        "palabra": "TUTORIAL",
+        "definicion": "Guía breve que enseña los controles o reglas de un juego."
+      },
+      {
+        "palabra": "JEFE",
+        "definicion": "Enemigo especialmente desafiante que suele aparecer al final de una etapa."
+      },
+      {
+        "palabra": "PORTAL",
+        "definicion": "Abertura ficticia que permite trasladarse entre lugares de un juego."
+      },
+      {
+        "palabra": "EQUIPO",
+        "definicion": "Conjunto de objetos o herramientas que lleva un personaje."
+      },
+      {
+        "palabra": "GUARDADO",
+        "definicion": "Registro que permite conservar el avance de una partida."
       }
     ],
     "deportes": [
@@ -591,7 +631,9 @@
       },
       {
         "palabra": "BALONCESTO",
-        "definicion": "Deporte de equipo en el que se anotan puntos al introducir el balón en un aro."
+        "definicion": "Deporte de equipo en el que se anotan puntos al introducir el balón en un aro.",
+        "datoCurioso": "El primer partido de baloncesto terminó 1 a 0.",
+        "fuenteDato": "https://www.hoophall.com/hall-of-famers/first-team"
       },
       {
         "palabra": "VOLEIBOL",
@@ -656,6 +698,22 @@
       {
         "palabra": "RUGBY",
         "definicion": "Deporte de equipo en el que se avanza con un balón ovalado."
+      },
+      {
+        "palabra": "GOL",
+        "definicion": "Anotación que se consigue al introducir el balón en la portería."
+      },
+      {
+        "palabra": "CANCHA",
+        "definicion": "Espacio delimitado donde se practica un deporte."
+      },
+      {
+        "palabra": "ÁRBITRO",
+        "definicion": "Persona que aplica las reglas y dirige una competición deportiva."
+      },
+      {
+        "palabra": "MEDALLA",
+        "definicion": "Distinción que se entrega a quienes destacan en una competencia."
       }
     ],
     "ciencia": [
@@ -688,8 +746,8 @@
         "definicion": "Abertura de la corteza terrestre por la que pueden salir lava y gases."
       },
       {
-        "palabra": "OCEANO",
-        "definicion": "Gran extensión de agua salada que cubre parte de la Tierra."
+        "palabra": "OCÉANO",
+        "definicion": "Gran extensión de agua salada que cubre cerca de tres cuartas partes de la superficie terrestre."
       },
       {
         "palabra": "GALAXIA",
@@ -730,6 +788,28 @@
       {
         "palabra": "EXPERIMENTO",
         "definicion": "Prueba organizada para observar un fenómeno y obtener información."
+      },
+      {
+        "palabra": "MICROSCOPIO",
+        "definicion": "Instrumento que permite observar objetos demasiado pequeños para verse a simple vista."
+      },
+      {
+        "palabra": "LABORATORIO",
+        "definicion": "Lugar equipado para realizar experimentos y analizar muestras."
+      },
+      {
+        "palabra": "ADN",
+        "definicion": "Molécula que contiene la información hereditaria de los seres vivos."
+      },
+      {
+        "palabra": "GENÉTICA",
+        "definicion": "Rama de la biología que estudia la herencia y la variación."
+      },
+      {
+        "palabra": "VENUS",
+        "definicion": "Segundo planeta desde el Sol y el más caliente del sistema solar.",
+        "datoCurioso": "Su rotación sobre su eje tarda unos 243 días terrestres, más que su órbita alrededor del Sol, que dura unos 225.",
+        "fuenteDato": "https://science.nasa.gov/venus/venus-facts/"
       }
     ],
     "cultura": [
@@ -778,10 +858,6 @@
         "definicion": "Celebración o serie de actividades artísticas y culturales."
       },
       {
-        "palabra": "MAPA",
-        "definicion": "Representación gráfica de un territorio o de una parte de él."
-      },
-      {
         "palabra": "CAPITAL",
         "definicion": "Ciudad donde suelen encontrarse las principales instituciones de un territorio."
       },
@@ -804,6 +880,298 @@
       {
         "palabra": "ARQUITECTURA",
         "definicion": "Arte y técnica de diseñar edificios y espacios."
+      },
+      {
+        "palabra": "LEYENDA",
+        "definicion": "Relato tradicional que mezcla elementos históricos y fantásticos."
+      },
+      {
+        "palabra": "MITO",
+        "definicion": "Relato tradicional que explica el origen de algo mediante personajes extraordinarios."
+      },
+      {
+        "palabra": "DANZA",
+        "definicion": "Arte de expresar ideas y emociones mediante movimientos del cuerpo."
+      },
+      {
+        "palabra": "MOSAICO",
+        "definicion": "Imagen o diseño formado al unir pequeñas piezas de distintos materiales."
+      },
+      {
+        "palabra": "ACUARELA",
+        "definicion": "Técnica de pintura que utiliza pigmentos diluidos en agua."
+      }
+    ],
+    "anime": [
+      {
+        "palabra": "ANIME",
+        "definicion": "Nombre habitual de las obras de animación japonesas, incluidas series y películas."
+      },
+      {
+        "palabra": "MANGA",
+        "definicion": "Cómic japonés; muchas ediciones se leen de derecha a izquierda."
+      },
+      {
+        "palabra": "KIMONO",
+        "definicion": "Prenda tradicional japonesa de mangas amplias y forma envolvente."
+      },
+      {
+        "palabra": "NINJA",
+        "definicion": "Persona entrenada en el Japón feudal para tareas de espionaje y sigilo."
+      },
+      {
+        "palabra": "SAMURÁI",
+        "definicion": "Guerrero de la clase militar que tuvo un papel importante en el Japón feudal."
+      },
+      {
+        "palabra": "SUSHI",
+        "definicion": "Plato japonés preparado con arroz sazonado con vinagre; puede servirse con distintos acompañamientos."
+      },
+      {
+        "palabra": "TOKIO",
+        "definicion": "Capital de Japón y una de las ciudades más pobladas del mundo."
+      },
+      {
+        "palabra": "SAKURA",
+        "definicion": "Nombre japonés de la flor del cerezo, símbolo de la primavera."
+      },
+      {
+        "palabra": "KARAOKE",
+        "definicion": "Actividad de cantar una canción siguiendo su música y letra en pantalla."
+      },
+      {
+        "palabra": "DOJO",
+        "definicion": "Lugar donde se practican artes marciales japonesas."
+      },
+      {
+        "palabra": "TANUKI",
+        "definicion": "Cánido silvestre de Asia oriental, conocido en Japón como tanuki; no es un mapache."
+      },
+      {
+        "palabra": "ORIGAMI",
+        "definicion": "Arte japonés de crear figuras doblando papel, normalmente sin cortarlo ni pegarlo."
+      },
+      {
+        "palabra": "COSPLAY",
+        "definicion": "Actividad de disfrazarse y representar a un personaje de ficción."
+      },
+      {
+        "palabra": "HAIKU",
+        "definicion": "Poema japonés breve cuya forma tradicional tiene tres grupos rítmicos de 5, 7 y 5 unidades de sonido en japonés."
+      },
+      {
+        "palabra": "KENDO",
+        "definicion": "Arte marcial japonés practicado con espadas de bambú y protecciones."
+      },
+      {
+        "palabra": "FUJI",
+        "definicion": "Monte Fuji, volcán y montaña más alta de Japón, considerado un símbolo del país."
+      },
+      {
+        "palabra": "YUKATA",
+        "definicion": "Prenda japonesa ligera parecida a un kimono, usada en ocasiones informales."
+      },
+      {
+        "palabra": "SEIYUU",
+        "definicion": "Actor o actriz de voz que interpreta personajes en animación, videojuegos y otros medios en Japón."
+      },
+      {
+        "palabra": "KANJI",
+        "definicion": "Caracteres de origen chino que se usan en la escritura japonesa."
+      },
+      {
+        "palabra": "KATANA",
+        "definicion": "Espada japonesa curva asociada históricamente con los samuráis."
+      },
+      {
+        "palabra": "MATCHA",
+        "definicion": "Té verde japonés molido hasta obtener un polvo fino."
+      },
+      {
+        "palabra": "TATAMI",
+        "definicion": "Esterilla tradicional japonesa que se usa como revestimiento de suelo."
+      }
+    ],
+    "gastronomia": [
+      {
+        "palabra": "AREPA",
+        "definicion": "Alimento redondo de maíz, tradicional en Colombia y Venezuela."
+      },
+      {
+        "palabra": "EMPANADA",
+        "definicion": "Preparación de masa rellena que se hornea o se fríe."
+      },
+      {
+        "palabra": "TAMAL",
+        "definicion": "Masa de maíz rellena y cocida, a menudo envuelta en hojas."
+      },
+      {
+        "palabra": "CEVICHE",
+        "definicion": "Plato de pescado o mariscos marinados con cítricos y otros ingredientes."
+      },
+      {
+        "palabra": "PAELLA",
+        "definicion": "Plato de arroz español que se cocina con diversos ingredientes."
+      },
+      {
+        "palabra": "TORTILLA",
+        "definicion": "Preparación redonda que puede hacerse con huevo o con masa de maíz."
+      },
+      {
+        "palabra": "CHOCOLATE",
+        "definicion": "Alimento elaborado a partir del cacao."
+      },
+      {
+        "palabra": "LIMONADA",
+        "definicion": "Bebida preparada principalmente con limón, agua y endulzante."
+      },
+      {
+        "palabra": "AGUACATE",
+        "definicion": "Fruto de pulpa cremosa usado en platos dulces y salados."
+      },
+      {
+        "palabra": "BUÑUELO",
+        "definicion": "Masa frita que en Colombia suele prepararse con queso y almidón."
+      },
+      {
+        "palabra": "PANQUEQUE",
+        "definicion": "Torta delgada de masa líquida cocinada en una sartén."
+      },
+      {
+        "palabra": "CANELA",
+        "definicion": "Especia aromática que se obtiene de la corteza de ciertos árboles."
+      },
+      {
+        "palabra": "PANELA",
+        "definicion": "Endulzante sólido obtenido al evaporar el jugo de la caña de azúcar."
+      },
+      {
+        "palabra": "FRIJOL",
+        "definicion": "Semilla comestible de una planta leguminosa, rica en proteína vegetal."
+      },
+      {
+        "palabra": "MAÍZ",
+        "definicion": "Cereal originario de América que se consume entero o molido."
+      },
+      {
+        "palabra": "CACAO",
+        "definicion": "Semilla de la que se obtiene el chocolate.",
+        "datoCurioso": "Los granos de cacao fueron tan apreciados por mayas y aztecas que se usaron como moneda en algunas zonas de América.",
+        "fuenteDato": "https://www.si.edu/spotlight/chocolate"
+      },
+      {
+        "palabra": "ESPECIA",
+        "definicion": "Parte aromática de una planta que se utiliza para dar sabor a los alimentos."
+      },
+      {
+        "palabra": "SARTÉN",
+        "definicion": "Utensilio de cocina ancho y poco profundo que se usa para freír o saltear."
+      },
+      {
+        "palabra": "RECETA",
+        "definicion": "Instrucciones y cantidades para preparar un plato."
+      },
+      {
+        "palabra": "HARINA",
+        "definicion": "Polvo que se obtiene al moler cereales, semillas u otros alimentos."
+      },
+      {
+        "palabra": "POSTRE",
+        "definicion": "Preparación dulce que suele servirse al final de una comida."
+      },
+      {
+        "palabra": "GUISO",
+        "definicion": "Plato cocinado lentamente con ingredientes y líquido en una olla."
+      }
+    ],
+    "geografia": [
+      {
+        "palabra": "COLOMBIA",
+        "definicion": "País de América del Sur con costas en el Caribe y el océano Pacífico."
+      },
+      {
+        "palabra": "BOGOTÁ",
+        "definicion": "Capital de Colombia, situada en una meseta de la cordillera Oriental."
+      },
+      {
+        "palabra": "AMAZONAS",
+        "definicion": "Región de Sudamérica que incluye gran parte de la cuenca del río Amazonas."
+      },
+      {
+        "palabra": "CORDILLERA",
+        "definicion": "Conjunto extenso de montañas enlazadas entre sí."
+      },
+      {
+        "palabra": "DESIERTO",
+        "definicion": "Región que recibe muy poca lluvia durante el año."
+      },
+      {
+        "palabra": "ISLA",
+        "definicion": "Porción de tierra rodeada completamente de agua."
+      },
+      {
+        "palabra": "GLACIAR",
+        "definicion": "Gran masa de hielo que se desplaza lentamente sobre la tierra."
+      },
+      {
+        "palabra": "CONTINENTE",
+        "definicion": "Gran extensión de tierra separada de otras por océanos o límites geográficos."
+      },
+      {
+        "palabra": "RÍO",
+        "definicion": "Corriente natural de agua que fluye hacia otro río, un lago o el mar."
+      },
+      {
+        "palabra": "PENÍNSULA",
+        "definicion": "Tierra rodeada de agua casi por completo y unida al continente por una franja."
+      },
+      {
+        "palabra": "ECUADOR",
+        "definicion": "País de América del Sur cuyo nombre alude a la línea ecuatorial; su capital es Quito."
+      },
+      {
+        "palabra": "MERIDIANO",
+        "definicion": "Línea imaginaria que une los polos y sirve para medir la longitud."
+      },
+      {
+        "palabra": "LATITUD",
+        "definicion": "Distancia angular de un lugar al ecuador, medida hacia el norte o el sur."
+      },
+      {
+        "palabra": "LONGITUD",
+        "definicion": "Distancia angular de un lugar al meridiano de Greenwich, hacia el este o el oeste."
+      },
+      {
+        "palabra": "ARCHIPIÉLAGO",
+        "definicion": "Conjunto de islas cercanas entre sí."
+      },
+      {
+        "palabra": "BAHÍA",
+        "definicion": "Entrada del mar en la costa, generalmente más pequeña que un golfo."
+      },
+      {
+        "palabra": "LAGUNA",
+        "definicion": "Extensión de agua, por lo común menor y menos profunda que un lago."
+      },
+      {
+        "palabra": "CATARATA",
+        "definicion": "Caída grande de agua de un río desde cierta altura."
+      },
+      {
+        "palabra": "SABANA",
+        "definicion": "Llanura cálida con pastos y árboles dispersos."
+      },
+      {
+        "palabra": "PÁRAMO",
+        "definicion": "Ecosistema de alta montaña de los Andes tropicales, importante para almacenar y regular el agua."
+      },
+      {
+        "palabra": "TRÓPICO",
+        "definicion": "Cada uno de los dos paralelos que delimitan la zona cálida de la Tierra."
+      },
+      {
+        "palabra": "HEMISFERIO",
+        "definicion": "Cada una de las dos mitades en que se puede dividir la Tierra."
       }
     ]
   },
@@ -814,6 +1182,9 @@
     "videojuegos": "Videojuegos",
     "deportes": "Deportes",
     "ciencia": "Ciencia",
-    "cultura": "Cultura general"
+    "cultura": "Cultura general",
+    "anime": "Anime y Japón",
+    "gastronomia": "Gastronomía",
+    "geografia": "Geografía"
   }
 }
