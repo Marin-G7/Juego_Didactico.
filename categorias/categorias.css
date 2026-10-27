@@ -89,3 +89,28 @@
   #lista-categorias { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 13px; }
   .tarjeta-categoria { min-height: 170px; padding: 20px; }
 }
+
+/* Selector de modos y categorías con aire de festival japonés. */
+.opciones-modo { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.opcion-modo { border: 2px solid #f3c7d5; border-radius: 24px 24px 24px 8px; background: linear-gradient(145deg, #fff, #fff2f6); box-shadow: 0 7px 0 #f7dce5; }
+.opcion-modo > span { color: #e45c8a; }
+.opcion-modo.seleccionado { border-color: #e45c8a; background: linear-gradient(145deg, #fff0f5, #ffe3ec); box-shadow: 0 0 0 3px rgba(228,92,138,.13), 0 7px 0 #f2c2d2; }
+.nombres-duelo, .ajustes-tiempo { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-top: 16px; padding: 20px; border: 2px dashed #eeb3c7; border-radius: 24px; background: linear-gradient(135deg, #fff0f4, #fff9e7); }
+.nombres-duelo.oculto, .ajustes-tiempo.oculto { display: none; }
+.nombres-duelo label, .ajustes-tiempo label { color: #51345e; }
+.nombres-duelo input, .ajustes-tiempo select, #cantidad-jugadores { width: 100%; min-height: 44px; margin-top: 6px; padding: 10px 12px; border: 2px solid #efd0db; border-radius: 14px; color: #39264f; background: #fff; font: inherit; }
+.lista-nombres-jugadores { display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 10px; grid-column: 1 / -1; }
+.nombres-duelo p, .ajustes-tiempo p { grid-column: 1 / -1; margin: 0; }
+.ajustes-tiempo { grid-template-columns: minmax(220px, 360px) 1fr; align-items: center; }
+.tarjeta-categoria { border-radius: 28px 28px 28px 10px; border: 3px solid rgba(255,255,255,.75); box-shadow: 0 8px 0 rgba(91,49,83,.12), var(--sombra-tarjeta); }
+.tarjeta-categoria::before { content: "✿"; position: absolute; top: 10px; right: 17px; color: rgba(255,255,255,.74); font-size: 1.6rem; }
+.tarjeta-categoria:hover { transform: translateY(-6px) rotate(-1deg); }
+.caja-verde { background: linear-gradient(140deg, #218c73, #65cfa3); }
+.caja-azul { background: linear-gradient(140deg, #536db5, #8d9fec); }
+.caja-rosa { background: linear-gradient(140deg, #dc4f87, #ff91b5); }
+.caja-violeta { background: linear-gradient(140deg, #694aa0, #ab7bd0); }
+.caja-amarilla { background: linear-gradient(140deg, #b87822, #f0b84c); }
+.caja-menta { background: linear-gradient(140deg, #398e91, #71c9bc); }
+.caja-coral { background: linear-gradient(140deg, #cd5368, #f28c91); }
+#ranking li { border: 1px solid #f4d6df; background: linear-gradient(120deg, #fff, #fff6f8); }
+@media(max-width:560px) { .ajustes-tiempo { grid-template-columns: 1fr; } }

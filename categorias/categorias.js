@@ -8,7 +8,34 @@ function leerDatosTemporales(clave, alternativa) {
 }
 
 function modoActual() {
-  return sessionStorage.getItem("modoJuego") === "duelo" ? "duelo" : "individual";
+  const modo = sessionStorage.getItem("modoJuego");
+  return ["duelo", "tiempo"].includes(modo) ? modo : "individual";
+}
+
+function nombresActuales() {
+  const guardados = leerDatosTemporales("nombresJugadores", []);
+  return Array.isArray(guardados) ? guardados : [];
+}
+
+function crearCamposNombres() {
+  const cantidad = Number(document.getElementById("cantidad-jugadores").value);
+  const nombresAnteriores = nombresActuales();
+  const valoresEnPantalla = [...document.querySelectorAll("#lista-nombres-jugadores input")].map(entrada => entrada.value);
+  const lista = document.getElementById("lista-nombres-jugadores");
+  lista.replaceChildren();
+  for (let indice = 0; indice < cantidad; indice++) {
+    const etiqueta = document.createElement("label");
+    etiqueta.textContent = `Jugador ${indice + 1}`;
+    const entrada = document.createElement("input");
+    entrada.type = "text";
+    entrada.maxLength = 18;
+    entrada.autocomplete = "nickname";
+    entrada.placeholder = ["Ej. Luna", "Ej. Alex", "Ej. Sakura", "Ej. Ken"][indice % 4];
+    entrada.dataset.jugador = String(indice);
+    entrada.value = valoresEnPantalla[indice] ?? nombresAnteriores[indice] ?? "";
+    etiqueta.appendChild(entrada);
+    lista.appendChild(etiqueta);
+  }
 }
 
 function mostrarModo(modo) {
@@ -16,7 +43,7 @@ function mostrarModo(modo) {
   sessionStorage.setItem("modoJuego", modo);
   if (modo === "duelo" && modoAnterior !== "duelo") {
     sessionStorage.setItem("indiceJugadorActual", "0");
-    sessionStorage.setItem("puntuacionJugadores", JSON.stringify([0, 0]));
+    sessionStorage.setItem("puntuacionJugadores", JSON.stringify([]));
   }
   document.querySelectorAll("[data-modo]").forEach(function (boton) {
     const seleccionado = boton.dataset.modo === modo;
@@ -24,42 +51,55 @@ function mostrarModo(modo) {
     boton.setAttribute("aria-pressed", String(seleccionado));
   });
   document.getElementById("nombres-duelo").classList.toggle("oculto", modo !== "duelo");
+  document.getElementById("ajustes-tiempo").classList.toggle("oculto", modo !== "tiempo");
+  if (modo === "duelo" && !document.querySelector("#lista-nombres-jugadores input")) crearCamposNombres();
   mostrarMarcador();
 }
 
 function activarModos() {
-  document.querySelectorAll("[data-modo]").forEach(function (boton) {
-    boton.addEventListener("click", function () {
-      mostrarModo(boton.dataset.modo);
-    });
+  document.querySelectorAll("[data-modo]").forEach(boton => {
+    boton.addEventListener("click", () => mostrarModo(boton.dataset.modo));
   });
-
-  const nombresGuardados = leerDatosTemporales("nombresJugadores", ["Jugador 1", "Jugador 2"]);
-  const nombres = Array.isArray(nombresGuardados) ? nombresGuardados : ["Jugador 1", "Jugador 2"];
-  document.getElementById("nombre-jugador-1").value = nombres[0] || "";
-  document.getElementById("nombre-jugador-2").value = nombres[1] || "";
+  const nombres = nombresActuales();
+  const selector = document.getElementById("cantidad-jugadores");
+  selector.value = String(Math.min(10, Math.max(2, nombres.length || 2)));
+  selector.addEventListener("change", crearCamposNombres);
+  crearCamposNombres();
+  document.getElementById("duracion-tiempo").value = sessionStorage.getItem("duracionTiempo") || "60";
   mostrarModo(modoActual());
 }
 
 function guardarPreparacionPartida() {
   const modo = modoActual();
   sessionStorage.setItem("modoJuego", modo);
-  if (sessionStorage.getItem("indiceJugadorActual") === null) sessionStorage.setItem("indiceJugadorActual", "0");
-
   if (modo === "duelo") {
-    const nombres = [
-      document.getElementById("nombre-jugador-1").value.trim() || "Jugador 1",
-      document.getElementById("nombre-jugador-2").value.trim() || "Jugador 2"
-    ];
-    if (nombres[0].toLocaleLowerCase() === nombres[1].toLocaleLowerCase()) nombres[1] = `${nombres[1]} 2`;
-    sessionStorage.setItem("nombresJugadores", JSON.stringify(nombres));
-    const marcador = leerDatosTemporales("puntuacionJugadores", null);
-    if (!Array.isArray(marcador)) sessionStorage.setItem("puntuacionJugadores", JSON.stringify([0, 0]));
+    const entradas = [...document.querySelectorAll("#lista-nombres-jugadores input")];
+    const nombres = entradas.map((entrada, indice) => entrada.value.trim() || `Jugador ${indice + 1}`);
+    const nombresUsados = new Set();
+    const nombresUnicos = nombres.map((nombre, indice) => {
+      let unico = nombre;
+      let sufijo = 2;
+      while (nombresUsados.has(unico.toLocaleLowerCase("es"))) unico = `${nombre} ${sufijo++}`;
+      nombresUsados.add(unico.toLocaleLowerCase("es"));
+      return unico;
+    });
+    const nombresPrevios = nombresActuales();
+    const marcadorPrevio = leerDatosTemporales("puntuacionJugadores", []);
+    const mismosJugadores = nombresPrevios.length === nombresUnicos.length && nombresPrevios.every((nombre, indice) => nombre === nombresUnicos[indice]);
+    sessionStorage.setItem("nombresJugadores", JSON.stringify(nombresUnicos));
+    const marcador = mismosJugadores && Array.isArray(marcadorPrevio)
+      ? nombresUnicos.map((_, indice) => Number(marcadorPrevio[indice]) || 0)
+      : Array(nombresUnicos.length).fill(0);
+    sessionStorage.setItem("puntuacionJugadores", JSON.stringify(marcador));
+    const indiceActual = mismosJugadores ? Number(sessionStorage.getItem("indiceJugadorActual")) || 0 : 0;
+    sessionStorage.setItem("indiceJugadorActual", String(Math.min(nombresUnicos.length - 1, indiceActual)));
+  } else if (modo === "tiempo") {
+    sessionStorage.setItem("duracionTiempo", document.getElementById("duracion-tiempo").value);
   }
 }
 
 function activarTarjetas() {
-  document.querySelectorAll(".tarjeta-categoria").forEach(function (tarjeta) {
+  document.querySelectorAll(".tarjeta-categoria").forEach(tarjeta => {
     tarjeta.addEventListener("click", function () {
       const idCategoria = tarjeta.dataset.categoria;
       if (!bancoPalabras[idCategoria]) return;
@@ -71,25 +111,19 @@ function activarTarjetas() {
 }
 
 function mostrarCantidadPalabras() {
-  document.querySelectorAll(".tarjeta-categoria").forEach(function (tarjeta) {
-    const categoria = tarjeta.dataset.categoria;
-    const cantidad = bancoPalabras[categoria]?.length || 0;
-    tarjeta.querySelector("[data-cantidad]").textContent =
-      cantidad === 1 ? "1 palabra para descubrir" : `${cantidad} palabras para descubrir`;
+  document.querySelectorAll(".tarjeta-categoria").forEach(tarjeta => {
+    const cantidad = bancoPalabras[tarjeta.dataset.categoria]?.length || 0;
+    tarjeta.querySelector("[data-cantidad]").textContent = `${cantidad} palabras para descubrir`;
   });
 }
 
 function mostrarMarcador() {
   const lista = document.getElementById("ranking");
   lista.replaceChildren();
-
   if (modoActual() === "duelo") {
-    const nombresGuardados = leerDatosTemporales("nombresJugadores", ["Jugador 1", "Jugador 2"]);
-    const nombres = Array.isArray(nombresGuardados) ? nombresGuardados.slice(0, 2) : ["Jugador 1", "Jugador 2"];
-    const puntosGuardados = leerDatosTemporales("puntuacionJugadores", [0, 0]);
-    const puntos = Array.isArray(puntosGuardados) ? puntosGuardados : [0, 0];
-    while (nombres.length < 2) nombres.push(`Jugador ${nombres.length + 1}`);
-    nombres.forEach(function (nombre, indice) {
+    const nombres = nombresActuales();
+    const puntos = leerDatosTemporales("puntuacionJugadores", []);
+    nombres.forEach((nombre, indice) => {
       const item = document.createElement("li");
       item.className = "fila-marcador";
       const jugador = document.createElement("span");
@@ -99,19 +133,17 @@ function mostrarMarcador() {
       item.append(jugador, puntaje);
       lista.appendChild(item);
     });
+    if (!nombres.length) lista.innerHTML = "<li>Agrega los nombres y comienza el torneo.</li>";
     return;
   }
 
   const historial = leerDatosTemporales("historialPartidas", []);
-  const ganadas = Array.isArray(historial) ? historial.filter(partida => partida?.gano === true) : [];
-  if (ganadas.length === 0) {
-    const vacio = document.createElement("li");
-    vacio.textContent = "Tus victorias de esta sesión aparecerán aquí.";
-    lista.appendChild(vacio);
+  const ganadas = Array.isArray(historial) ? historial.filter(partida => partida?.gano) : [];
+  if (!ganadas.length) {
+    lista.innerHTML = "<li>Tus victorias de esta sesión aparecerán aquí.</li>";
     return;
   }
-
-  ganadas.slice(-5).reverse().forEach(function (partida) {
+  ganadas.slice(-5).reverse().forEach(partida => {
     const item = document.createElement("li");
     item.textContent = `${partida.palabra || "Palabra"} (${partida.categoria || "Categoría"})`;
     lista.appendChild(item);

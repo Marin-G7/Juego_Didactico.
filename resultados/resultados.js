@@ -14,11 +14,10 @@ let ultimaPartida = leerTemporal("ultimaPartida", null);
 if (!ultimaPartida || typeof ultimaPartida.palabra !== "string") ultimaPartida = null;
 const modoDuelo = sessionStorage.getItem("modoJuego") === "duelo";
 const nombresGuardados = leerTemporal("nombresJugadores", ["Jugador 1", "Jugador 2"]);
-const nombres = Array.isArray(nombresGuardados) ? nombresGuardados.slice(0, 2) : ["Jugador 1", "Jugador 2"];
-while (nombres.length < 2) nombres.push(`Jugador ${nombres.length + 1}`);
-const puntosGuardados = leerTemporal("puntuacionJugadores", [0, 0]);
-const puntosDuelo = Array.isArray(puntosGuardados) ? puntosGuardados.map(p => Number(p) || 0).slice(0, 2) : [0, 0];
-while (puntosDuelo.length < 2) puntosDuelo.push(0);
+const nombres = Array.isArray(nombresGuardados) && nombresGuardados.length >= 2 ? nombresGuardados : ["Jugador 1", "Jugador 2"];
+const puntosGuardados = leerTemporal("puntuacionJugadores", Array(nombres.length).fill(0));
+const puntosDuelo = Array.isArray(puntosGuardados) ? puntosGuardados.map(p => Number(p) || 0).slice(0, nombres.length) : Array(nombres.length).fill(0);
+while (puntosDuelo.length < nombres.length) puntosDuelo.push(0);
 
 function mostrarReaccion(nombreArchivo, descripcion) {
   const gato = document.getElementById("gato");
@@ -49,7 +48,7 @@ function mostrarResultado() {
   if (ultimaPartida.gano) {
     tarjeta.classList.remove("perdio");
     titulo.textContent = "¡Victoria!";
-    mensaje.textContent = `${ultimaPartida.jugador || "Tú"} resolvió la palabra y obtuvo ${ultimaPartida.puntos || 0} puntos.`;
+    mensaje.textContent = `${ultimaPartida.jugador || "Tú"} resolvió la palabra y obtuvo ${ultimaPartida.puntos || 0} puntos${ultimaPartida.modo === "tiempo" ? ` con ${ultimaPartida.tiempoRestante} s restantes` : ""}.`;
     mostrarReaccion("orgulloso.png", "Gato negro orgulloso por la victoria");
   } else {
     tarjeta.classList.add("perdio");
@@ -82,7 +81,7 @@ function mostrarMarcadorDuelo() {
   document.querySelector(".tarjeta-resultado .boton-verde")?.classList.add("oculto");
   const lista = document.getElementById("marcador-jugadores");
   lista.replaceChildren();
-  nombres.slice(0, 2).forEach(function (nombre, indice) {
+  nombres.forEach(function (nombre, indice) {
     const item = document.createElement("li");
     item.className = "fila-marcador";
     const jugador = document.createElement("span");
@@ -97,7 +96,7 @@ function mostrarMarcadorDuelo() {
     boton.classList.remove("oculto");
     boton.addEventListener("click", function () {
       const jugadorAnterior = Number.isInteger(ultimaPartida.jugadorIndice) ? ultimaPartida.jugadorIndice : Math.max(0, nombres.indexOf(ultimaPartida.jugador));
-      sessionStorage.setItem("indiceJugadorActual", String((jugadorAnterior + 1) % 2));
+      sessionStorage.setItem("indiceJugadorActual", String((jugadorAnterior + 1) % nombres.length));
       window.location.href = "../juego/juego.html";
     });
   }

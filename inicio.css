@@ -39,3 +39,11 @@
 .portada-ilustracion img { width: 100%; height: 100%; padding: 10px; border-radius: inherit; object-fit: contain; }
 .portada-ilustracion span { inset: auto; top: -17px; right: -20px; width: 55px; height: 55px; border-radius: 50%; color: #30255f; background: #ffc857; font-size: 2rem; box-shadow: 0 8px 18px rgba(20, 20, 50, .2); }
 @media(max-width: 760px) { .portada-ilustracion { width: 132px; height: 160px; right: -18px; opacity: .5; } }
+.portada { border: 4px solid rgba(255,255,255,.7); border-radius: 34px 34px 34px 12px; background: linear-gradient(125deg, #563568 0%, #855078 48%, #ed7998 100%); box-shadow: 0 10px 0 #efd7e1, 0 20px 45px rgba(83,49,91,.18); }
+.portada::before { border: 24px solid rgba(255,255,255,.1); }
+.etiqueta-portada { display: inline-block; padding: 7px 12px; border-radius: 999px; color: #51334f; background: #ffe199; letter-spacing: .08em; }
+.portada-ilustracion { border: 5px solid #fff; box-shadow: 0 0 0 9px rgba(255,255,255,.2), 0 18px 45px rgba(10,10,35,.25); transform: translateY(-50%) rotate(4deg); }
+.boton-inicio { color: #563568; background: linear-gradient(135deg, #ffe493, #ffd166); box-shadow: 0 5px 0 #dca945; }
+.pasos article { border: 2px solid #f3d5df; border-radius: 26px 26px 26px 8px; background: linear-gradient(145deg,#fff,#fff4f7); box-shadow: 0 7px 0 #f5e1e8; }
+.pasos article > span { display: inline-grid; width: 38px; height: 38px; place-items: center; border-radius: 50%; color: #583967; background: #ffe19a; }
+.pasos h3 { color: #75436e; }

@@ -27,6 +27,9 @@ let modoJuego = "individual";
 let indiceJugadorActual = 0;
 let nombresJugadores = ["Jugador 1", "Jugador 2"];
 let puntuacionesJugadores = [0, 0];
+let duracionTiempo = 60;
+let segundosRestantes = 60;
+let relojPartida = null;
 
 // Quitamos tildes para comparar, pero protegemos la Ñ para que no se convierta en N.
 function normalizar(texto) {
@@ -75,13 +78,16 @@ function iniciarJuego() {
     return;
   }
 
-  modoJuego = sessionStorage.getItem("modoJuego") === "duelo" ? "duelo" : "individual";
-  indiceJugadorActual = Math.min(1, Math.max(0, Number(sessionStorage.getItem("indiceJugadorActual")) || 0));
+  const modoGuardado = sessionStorage.getItem("modoJuego");
+  modoJuego = ["duelo", "tiempo"].includes(modoGuardado) ? modoGuardado : "individual";
   const nombresGuardados = leerJSONTemporal("nombresJugadores", ["Jugador 1", "Jugador 2"]);
-  if (Array.isArray(nombresGuardados)) nombresJugadores = [nombresGuardados[0] || "Jugador 1", nombresGuardados[1] || "Jugador 2"];
+  if (Array.isArray(nombresGuardados) && nombresGuardados.length >= 2) nombresJugadores = nombresGuardados;
+  indiceJugadorActual = modoJuego === "duelo"
+    ? Math.min(nombresJugadores.length - 1, Math.max(0, Number(sessionStorage.getItem("indiceJugadorActual")) || 0)) : 0;
   const puntosGuardados = leerJSONTemporal("puntuacionJugadores", [0, 0]);
-  if (Array.isArray(puntosGuardados)) puntuacionesJugadores = puntosGuardados.map(p => Number(p) || 0).slice(0, 2);
-  while (puntuacionesJugadores.length < 2) puntuacionesJugadores.push(0);
+  if (Array.isArray(puntosGuardados)) puntuacionesJugadores = puntosGuardados.map(p => Number(p) || 0).slice(0, nombresJugadores.length);
+  while (puntuacionesJugadores.length < nombresJugadores.length) puntuacionesJugadores.push(0);
+  duracionTiempo = Math.min(90, Math.max(30, Number(sessionStorage.getItem("duracionTiempo")) || 60));
 
   const palabras = bancoPalabras[categoriaActual];
   let palabrasDisponibles = palabras;
@@ -112,7 +118,12 @@ function iniciarJuego() {
   document.getElementById("categoria-juego").textContent = nombresCategorias[categoriaActual];
   const turno = document.getElementById("turno-actual");
   turno.classList.toggle("oculto", modoJuego !== "duelo");
-  turno.textContent = modoJuego === "duelo" ? `Turno de ${nombresJugadores[indiceJugadorActual]}` : "";
+  turno.textContent = modoJuego === "duelo" ? `🎏 Turno de ${nombresJugadores[indiceJugadorActual]}` : "";
+  clearInterval(relojPartida);
+  const temporizador = document.getElementById("temporizador");
+  temporizador.classList.toggle("oculto", modoJuego !== "tiempo");
+  segundosRestantes = duracionTiempo;
+  temporizador.textContent = `⏱️ ${segundosRestantes} s`;
   document.getElementById("btn-ver-resultado").classList.add("oculto");
   document.getElementById("btn-siguiente-turno").classList.add("oculto");
   document.getElementById("mensaje-estado").textContent = "";
@@ -129,6 +140,21 @@ function iniciarJuego() {
   });
   actualizarPalabraOculta();
   mostrarReaccion("pensando", "¡A ver si encuentras la palabra!");
+  if (modoJuego === "tiempo") iniciarTemporizador();
+}
+
+function iniciarTemporizador() {
+  relojPartida = window.setInterval(function () {
+    segundosRestantes = Math.max(0, segundosRestantes - 1);
+    const temporizador = document.getElementById("temporizador");
+    temporizador.textContent = `⏱️ ${segundosRestantes} s`;
+    temporizador.classList.toggle("poco-tiempo", segundosRestantes <= 10);
+    if (segundosRestantes === 0) {
+      clearInterval(relojPartida);
+      document.getElementById("palabra-oculta").textContent = palabraActual;
+      terminarJuego(false, true);
+    }
+  }, 1000);
 }
 
 function actualizarPalabraOculta() {
@@ -224,13 +250,14 @@ function revisarEstadoJuego() {
   }
 }
 
-function terminarJuego(gano) {
+function terminarJuego(gano, seAcaboElTiempo = false) {
   if (juegoTerminado) return;
   juegoTerminado = true;
+  clearInterval(relojPartida);
   const nombre = modoJuego === "duelo" ? nombresJugadores[indiceJugadorActual] : "Tú";
   document.getElementById("mensaje-estado").textContent = gano
     ? `¡${nombre} ganó la ronda! Adivinaste la palabra.`
-    : `¡Casi, ${nombre}! La palabra era ${palabraActual}.`;
+    : seAcaboElTiempo ? `¡Se acabó el tiempo! La palabra era ${palabraActual}.` : `¡Casi, ${nombre}! La palabra era ${palabraActual}.`;
   document.getElementById("definicion-pista").textContent = definicionActual;
   document.querySelectorAll("#teclado-letras button").forEach(boton => { boton.disabled = true; });
   document.getElementById("btn-pista-definicion").disabled = true;
@@ -242,7 +269,7 @@ function terminarJuego(gano) {
 }
 
 function guardarResultado(gano) {
-  const puntos = gano ? Math.max(0, 100 + (MAX_INTENTOS - errores) * 25 + palabraActual.length * 5) : 0;
+  const puntos = gano ? Math.max(0, 100 + (MAX_INTENTOS - errores) * 25 + palabraActual.length * 5 + (modoJuego === "tiempo" ? segundosRestantes * 2 : 0)) : 0;
   const jugador = modoJuego === "duelo" ? nombresJugadores[indiceJugadorActual] : "Tú";
   const resultado = {
     palabra: palabraActual,
@@ -252,7 +279,9 @@ function guardarResultado(gano) {
     jugador,
     jugadorIndice: indiceJugadorActual,
     puntos,
-    errores
+    errores,
+    modo: modoJuego,
+    tiempoRestante: modoJuego === "tiempo" ? segundosRestantes : null
   };
   const historial = leerHistorial();
   historial.push(resultado);
@@ -271,7 +300,7 @@ function guardarResultado(gano) {
 
 function pasarTurno() {
   if (modoJuego !== "duelo" || !juegoTerminado) return;
-  sessionStorage.setItem("indiceJugadorActual", String((indiceJugadorActual + 1) % 2));
+  sessionStorage.setItem("indiceJugadorActual", String((indiceJugadorActual + 1) % nombresJugadores.length));
   window.location.reload();
 }
 

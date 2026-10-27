@@ -246,3 +246,9 @@ main {
 @media(max-width:600px) { .cajas-stats { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); } .caja-stat { min-width: 0; } .zona-gato { margin: 0 auto; } .gato { width: 145px; height: 145px; } }
 .gato.animar-reaccion { animation: rebote-gato .45s ease both; }
 .nota-sesion { margin: 8px 0 15px; color: var(--color-suave); font-size: .92rem; }
+.tarjeta-resultado { border: 3px solid #fff; border-radius: 32px 32px 32px 12px; box-shadow: 0 8px 0 #f0d5df, var(--sombra-tarjeta); }
+.bloque-aprendizaje, .bloque-historial { border: 2px solid #f3d3df; border-left: 8px solid #75c8a5; border-radius: 25px 25px 25px 8px; background: linear-gradient(145deg, #fff, #fff5f8); box-shadow: 0 7px 0 #f4e1e8; }
+.bloque-stats h2::after { content: " ✿"; color: #ed6e99; }
+.caja-stat { border: 2px solid rgba(255,255,255,.6); border-radius: 24px 24px 24px 8px; box-shadow: 0 6px 0 rgba(86,51,104,.12); }
+.bloque-historial #historial-partidas li, #marcador-jugadores li { border: 1px solid #f3d7e1; border-radius: 17px 17px 17px 6px; background: #fff; }
+.boton-reset { border-radius: 18px 18px 18px 6px; color: #fff; background: linear-gradient(135deg, #8055bd, #b16eab); }

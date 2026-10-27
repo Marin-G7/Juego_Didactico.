@@ -158,3 +158,15 @@
   .mascota-juego[data-reaccion="indiferente"] .gato-reaccion { height: 78px; }
 }
 .gato-reaccion.animar-reaccion { animation: rebote-gato .45s ease both; }
+.tarjeta-juego { border: 3px solid #f4d1dd; border-radius: 30px 30px 30px 10px; background: linear-gradient(145deg, #fff, #fff7f2); box-shadow: 0 9px 0 #f5e2e7, var(--sombra-tarjeta); }
+.zona-dibujo { padding: 12px; border-radius: 28px; background: radial-gradient(circle, #fff1c9, #ffe4ee); }
+.dibujo-ahorcado line:not(:first-child), .dibujo-ahorcado circle { stroke: #ed668c; }
+.definicion-pista { border-left-color: #e66b94; border-radius: 0 18px 18px 0; background: #fff1f5; }
+#palabra-oculta { color: #56336c; text-shadow: 0 3px #f7dce7; }
+#teclado-letras button { border-radius: 14px 14px 14px 5px; color: #493354; background: linear-gradient(145deg, #ffe29a, #ffd166); box-shadow: 0 4px 0 #e6ad4e; }
+#teclado-letras button.correcta { color: #fff; background: linear-gradient(145deg, #55bfa2, #89d8ae); box-shadow: 0 4px 0 #409c83; }
+#teclado-letras button.incorrecta { color: #fff; background: linear-gradient(145deg, #ef6b87, #fa9cae); box-shadow: 0 4px 0 #cf526d; }
+.temporizador { display: inline-flex; min-width: 112px; justify-content: center; padding: 9px 15px; border: 2px solid #f4b44c; border-radius: 999px; color: #653f24; background: #fff0bc; font-size: 1.2rem; font-weight: 900; box-shadow: 0 4px 0 #f3d88e; }
+.temporizador.poco-tiempo { color: #fff; border-color: #e34f76; background: #e34f76; animation: pulso-reloj .6s ease-in-out infinite alternate; }
+@keyframes pulso-reloj { to { transform: scale(1.08); } }
+.boton-pista { border-color: #dfa2bd; color: #613b70; background: linear-gradient(145deg, #fff0f6, #f8eaff); }
