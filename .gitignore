@@ -1,11 +1,13 @@
-node_modules/
+# Dependencias y salidas generadas
 **/node_modules/
-dist/
-client/dist/
+**/dist/
+
+# Configuración privada local
 server/.env
 .env
 .env.*
 !server/.env.example
-!client/.env.example
+
+# Archivos temporales del sistema
 *.log
 .DS_Store

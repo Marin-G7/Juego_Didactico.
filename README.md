@@ -20,6 +20,8 @@ legacy-html/             Versión HTML/CSS/JS original conservada
 
 El frontend React/Vite está en la raíz del proyecto. El servidor Express corre por separado en `server/`. El recorrido de los datos es **React → API Express → MongoDB Atlas**; React nunca contiene la contraseña de Atlas.
 
+En VS Code, el Explorer oculta `dist/`, `node_modules/` y la carpeta `client/` antigua, que solo conserva archivos generados. No se borran: la aplicación React actual vive en `src/`, las imágenes en `public/` y la copia anterior en `legacy-html/`.
+
 ## Ya existe tu base en Atlas
 
 El backend está preparado para usar tu base `juego_ahorcado`. Guardará las partidas en una colección separada llamada `partidas`, dejando intacta la colección `juego` que ya creaste. MongoDB crea `partidas` automáticamente al insertar la primera partida.
