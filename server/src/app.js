@@ -1,6 +1,6 @@
 import express from "express";
 import { ObjectId } from "mongodb";
-import { getDatabase } from "./db.js";
+import { getDatabase, getRoundsCollection } from "./db.js";
 import datos from "./data/palabras.json" with { type: "json" };
 
 const app = express();
@@ -23,13 +23,13 @@ app.get("/api/palabras/:categoria", (request, response) => {
 });
 
 app.get("/api/partidas", async (request, response) => {
-  const database = getDatabase();
-  if (!database) return response.status(503).json({ error: "Configura MongoDB Atlas para consultar partidas guardadas." });
+  const collection = getRoundsCollection();
+  if (!collection) return response.status(503).json({ error: "Configura MongoDB Atlas para consultar partidas guardadas." });
   const jugadorId = String(request.query.jugadorId || "");
   if (!/^[a-z0-9-]{1,80}$/.test(jugadorId)) return response.status(400).json({ error: "Indica un identificador de jugador válido." });
   try {
     const limite = Math.min(50, Math.max(1, Number(request.query.limite) || 20));
-    const partidas = await database.collection("partidas").find({ jugadorId }).sort({ creadaEn: -1 }).limit(limite).toArray();
+    const partidas = await collection.find({ jugadorId }).sort({ creadaEn: -1 }).limit(limite).toArray();
     response.json(partidas.map(({ _id, ...partida }) => ({ id: _id.toString(), ...partida })));
   } catch (error) {
     console.error("No se pudieron consultar las partidas:", error.message);
@@ -38,8 +38,8 @@ app.get("/api/partidas", async (request, response) => {
 });
 
 app.post("/api/partidas", async (request, response) => {
-  const database = getDatabase();
-  if (!database) return response.status(503).json({ error: "Configura MongoDB Atlas para guardar partidas." });
+  const collection = getRoundsCollection();
+  if (!collection) return response.status(503).json({ error: "Configura MongoDB Atlas para guardar partidas." });
   const { palabra, categoria, gano, puntos, errores, modo, jugador, jugadorId } = request.body ?? {};
   if (typeof palabra !== "string" || palabra.length < 1 || palabra.length > 40 || !Object.hasOwn(datos.bancoPalabras, categoria) ||
       typeof gano !== "boolean" || !Number.isFinite(Number(puntos)) || !Number.isFinite(Number(errores)) ||
@@ -57,7 +57,7 @@ app.post("/api/partidas", async (request, response) => {
         ? Math.max(0, Math.min(90, Number(request.body.tiempoRestante))) : null,
       creadaEn: new Date()
     };
-    const resultado = await database.collection("partidas").insertOne(documento);
+    const resultado = await collection.insertOne(documento);
     response.status(201).json({ id: resultado.insertedId.toString(), ...documento, creadaEn: documento.creadaEn.toISOString() });
   } catch (error) {
     console.error("No se pudo guardar la partida:", error.message);
@@ -66,11 +66,11 @@ app.post("/api/partidas", async (request, response) => {
 });
 
 app.delete("/api/partidas/:id", async (request, response) => {
-  const database = getDatabase();
-  if (!database) return response.status(503).json({ error: "Configura MongoDB Atlas para borrar partidas." });
+  const collection = getRoundsCollection();
+  if (!collection) return response.status(503).json({ error: "Configura MongoDB Atlas para borrar partidas." });
   if (!ObjectId.isValid(request.params.id)) return response.status(400).json({ error: "El identificador no es válido." });
   try {
-    const resultado = await database.collection("partidas").deleteOne({ _id: new ObjectId(request.params.id) });
+    const resultado = await collection.deleteOne({ _id: new ObjectId(request.params.id) });
     if (!resultado.deletedCount) return response.status(404).json({ error: "No se encontró esa partida." });
     response.status(204).end();
   } catch (error) {
@@ -86,5 +86,4 @@ app.use((error, _request, response, _next) => {
 });
 
 export default app;
-
 

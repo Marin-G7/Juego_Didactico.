@@ -11,14 +11,20 @@ export async function connectDatabase() {
   }
   client = new MongoClient(uri, { serverSelectionTimeoutMS: 8000 });
   await client.connect();
-  database = client.db(process.env.MONGODB_DB || "ahorcado_educativo");
-  await database.collection("partidas").createIndex({ creadaEn: -1 });
-  console.log(`Conectado a MongoDB: ${database.databaseName}`);
+  database = client.db(process.env.MONGODB_DB || "juego_ahorcado");
+  const collection = process.env.MONGODB_COLLECTION || "partidas";
+  await database.collection(collection).createIndex({ creadaEn: -1 });
+  console.log(`Conectado a MongoDB: ${database.databaseName}, colección ${collection}`);
   return database;
 }
 
 export function getDatabase() {
   return database || null;
+}
+
+export function getRoundsCollection() {
+  if (!database) return null;
+  return database.collection(process.env.MONGODB_COLLECTION || "partidas");
 }
 
 export async function closeDatabase() {
