@@ -30,6 +30,7 @@ export default function ResultsPage() {
     .sort((a, b) => b.points - a.points || a.index - b.index);
   const topScore = ranking[0]?.points || 0;
   const leaders = ranking.filter(player => player.points === topScore);
+  const canShowLearning = latestResult && ["tiempo", "individual", "formar"].includes(latestResult.modo);
 
   useEffect(() => {
     let cancelled = false;
@@ -44,14 +45,19 @@ export default function ResultsPage() {
   }, [mode, players, latestResult, saveNotice]);
 
   const startFresh = () => {
-    if (window.confirm("¿Borramos el marcador y el historial temporal de esta pestaña?")) newSession();
+    if (window.confirm("¿Quieres borrar el marcador y las partidas de esta sesión?")) newSession();
   };
   const continuePlaying = () => multiplayerModes.includes(mode) ? nextPlayer() : startRound(categoryId);
   const title = matchWinner ? `¡${matchWinner.name} gana la partida!` : !latestResult ? "¡Tu aventura te espera!" : latestResult.gano ? "¡Victoria brillante!" : "¡Palabra rebelde!";
 
   return <section className="results-page">
     <div className={`result-banner ${latestResult && !latestResult.gano && !matchWinner ? "result-loss" : ""}`}>
-      <CatReaction name={matchWinner || latestResult?.gano ? "orgulloso" : latestResult ? "derrota" : "normal"} className="result-cat" />
+      <div className="result-cat-learning">
+        <CatReaction name={matchWinner || latestResult?.gano ? "orgulloso" : latestResult ? "derrota" : "normal"} className="result-cat" />
+        {canShowLearning && latestResult?.definicion && <section className="learning-card learning-card-inline"><span className="eyebrow">📚 ¿QUÉ APRENDISTE?</span><p>{latestResult.definicion}</p>
+          {latestResult.datoCurioso && <aside className="curiosity-card"><span aria-hidden="true">🔎</span><div><strong>Dato curioso</strong><p>{latestResult.datoCurioso}</p>{latestResult.fuenteDato && <a href={latestResult.fuenteDato} target="_blank" rel="noreferrer">Conoce la fuente ↗</a>}</div></aside>}
+        </section>}
+      </div>
       <div className="result-copy"><span className="eyebrow">📜 TU RESUMEN 🎴</span><h1>{title}</h1>
         <p>{matchWinner ? `${matchWinner.avatar} conservó sus vidas y ganó la partida de eliminación.` : latestResult ? latestResult.gano
           ? `${latestResult.jugador} adivinó ${latestResult.palabra} y ganó ${latestResult.puntos} puntos.`
@@ -66,9 +72,6 @@ export default function ResultsPage() {
       </div>
     </div>
     {latestResult && <p className="score-explanation">🪙 Puntuación: 25 puntos por resolver + 2 por cada intento que te quede. En partidas con tiempo puedes ganar hasta 10 extra.</p>}
-    {latestResult?.definicion && <section className="learning-card"><span className="eyebrow">📚 UNA PALABRA NUEVA</span><h2>¿Qué aprendiste?</h2><p>{latestResult.definicion}</p>
-      {latestResult.datoCurioso && <aside className="curiosity-card"><span aria-hidden="true">🔎</span><div><strong>Dato curioso</strong><p>{latestResult.datoCurioso}</p>{latestResult.fuenteDato && <a href={latestResult.fuenteDato} target="_blank" rel="noreferrer">Conoce la fuente ↗</a>}</div></aside>}
-    </section>}
     <section className="progress-section" aria-labelledby="session-progress-title">
       <div className="section-heading"><span className="eyebrow">📜 PROGRESO DE LA SESIÓN</span><h2 id="session-progress-title">Así vas jugando</h2></div>
       <div className="stats-grid">
@@ -79,7 +82,7 @@ export default function ResultsPage() {
       </div>
       <div className="progress-label"><span>Porcentaje de victorias</span><strong>{percentage}%</strong></div>
       <div className="progress-track" role="meter" aria-label="Porcentaje de victorias de esta sesión" aria-valuemin="0" aria-valuemax="100" aria-valuenow={percentage}><div style={{ width: `${percentage}%` }} /></div>
-      <p className="helper-copy">Este resumen cuenta solo las partidas de esta sesión; el historial temporal se borra al cerrar la pestaña.</p>
+      <p className="helper-copy">Este resumen cuenta las partidas de la sesión actual.</p>
       {saveNotice && <p className="save-notice" role="status">{saveNotice}</p>}
     </section>
     {multiplayerModes.includes(mode) && <section className="leaderboard-card" aria-labelledby="leaderboard-title">
@@ -96,23 +99,23 @@ export default function ResultsPage() {
       <p className="helper-copy">El marcador se conserva al elegir otra categoría; cambia si modificas la lista de jugadores o borras la sesión.</p>
     </section>}
     <section className="history-card" aria-labelledby="session-history-title">
-      <div className="section-heading"><span className="eyebrow">🕹️ SESIÓN ACTUAL</span><h2 id="session-history-title">📜 Historial temporal</h2></div>
-      <p className="helper-copy">Solo aparece en esta pestaña y se borra al cerrarla.</p>
+      <div className="section-heading"><span className="eyebrow">🕹️ SESIÓN ACTUAL</span><h2 id="session-history-title">📜 Partidas de esta sesión</h2></div>
+      <p className="helper-copy">Aquí puedes revisar cómo te fue en las partidas de hoy.</p>
       {displayHistory.length ? <ul className="history-list">{displayHistory.slice(-10).reverse().map((round, index) => <li key={round.id || `${round.palabra}-${index}`}>
         <span>{multiplayerModes.includes(mode) ? `${round.jugador}: ` : ""}<strong>{round.palabra}</strong><small>{nameOfCategory(round)}</small></span>
         <b className={round.gano ? "won-label" : "lost-label"}>{round.gano ? `Ganada · ${round.puntos} pts` : "Perdida"}</b>
       </li>)}</ul> : <p className="empty-state">Todavía no hay partidas en esta sesión. ¡Elige una categoría para empezar!</p>}
-      <button className="button button-outline" onClick={startFresh}>🧹 Borrar sesión y progreso temporal</button>
+      <button className="button button-outline" onClick={startFresh}>🧹 Borrar partidas de esta sesión</button>
     </section>
     <section className="history-card atlas-history" aria-labelledby="atlas-history-title">
-      <div className="section-heading"><span className="eyebrow">☁️ NUBE</span><h2 id="atlas-history-title">Partidas guardadas en Atlas</h2></div>
-      <p className="helper-copy">Estas partidas quedan guardadas en la base de datos aunque cierres la pestaña. Mostramos las diez más recientes.</p>
-      {atlasLoading && <p className="empty-state" role="status">🔄 Consultando las partidas guardadas…</p>}
-      {!atlasLoading && databaseMessage && <p className="save-notice local-notice" role="status">No se pudo consultar Atlas: {databaseMessage}</p>}
+      <div className="section-heading"><span className="eyebrow">☁️ TUS RÉCORDS</span><h2 id="atlas-history-title">Partidas guardadas</h2></div>
+      <p className="helper-copy">Consulta aquí tus diez partidas más recientes.</p>
+      {atlasLoading && <p className="empty-state" role="status">🔄 Cargando tus partidas…</p>}
+      {!atlasLoading && databaseMessage && <p className="save-notice local-notice" role="status">No pudimos cargar tus partidas guardadas ahora. Intenta de nuevo más tarde.</p>}
       {!atlasLoading && !databaseMessage && (savedHistory.length ? <ul className="history-list">{savedHistory.slice(0, 10).map((round, index) => <li key={round.id || `${round.palabra}-${index}`}>
         <span>{multiplayerModes.includes(mode) ? `${round.jugador}: ` : ""}<strong>{round.palabra}</strong><small>{nameOfCategory(round)}</small></span>
         <b className={round.gano ? "won-label" : "lost-label"}>{round.gano ? `Ganada · ${round.puntos} pts` : "Perdida"}</b>
-      </li>)}</ul> : !atlasLoading && <p className="empty-state">Aún no hay partidas guardadas para este jugador o equipo.</p>)}
+      </li>)}</ul> : !atlasLoading && <p className="empty-state">Todavía no hay partidas guardadas. ¡Juega una ronda para empezar tu colección!</p>)}
     </section>
   </section>;
 }

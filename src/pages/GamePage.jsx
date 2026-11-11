@@ -3,6 +3,8 @@ import { Link, Navigate } from "react-router";
 import { useGame } from "../context/GameContext.jsx";
 import { CatReaction, HangmanDrawing } from "../components/SiteLayout.jsx";
 import { calculatePoints } from "../services/scoring.js";
+import { useAuth } from "../context/AuthContext.jsx";
+import { rewards } from "../data/rewards.js";
 
 const alphabet = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
 const multiplayerModes = ["duelo", "formar-duelo", "eliminacion"];
@@ -21,10 +23,13 @@ function shuffle(text) {
 }
 
 export default function GamePage() {
-  const { mode, duration, attempts, difficulty, players, playerAvatars, scores, currentPlayer, lives, livesPerPlayer, activeRound, finishRound } = useGame();
+  const { mode, duration, attempts, difficulty, players, playerAvatars, scores, currentPlayer, lives, livesPerPlayer, activeRound, finishRound, finishSession } = useGame();
+  const { user } = useAuth();
+  const activeReward = rewards.find(reward => reward.id === user?.recompensaActiva);
   const multiplayer = multiplayerModes.includes(mode);
   const formation = formationModes.includes(mode);
   const timed = mode === "tiempo" || formation;
+  const definitionAllowed = ["individual", "tiempo", "formar"].includes(mode);
   const [guessed, setGuessed] = useState(() => new Set());
   const [mistakes, setMistakes] = useState(0);
   const [seconds, setSeconds] = useState(duration);
@@ -182,7 +187,7 @@ export default function GamePage() {
     <div className="game-heading"><span className="eyebrow">🎴 {activeRound.categoryName.toLocaleUpperCase("es")} 🎴</span><h1>{formation ? "¡Forma la palabra!" : "¡Adivina la palabra!"}</h1>
       {multiplayer && <span className="turn-pill">{playerAvatars[currentPlayer] || "🐱"} Turno de {playerName}</span>}
       {timed && <span role="timer" aria-label={`Tiempo restante: ${seconds} segundos`} className={`timer-pill ${seconds <= 10 ? "urgent" : ""}`}>⏱️ {seconds} s</span>}
-      {multiplayer && <span className="difficulty-pill">🎚️ Dificultad: {difficultyLabel}</span>}
+      <span className="difficulty-pill">🎚️ Dificultad: {difficultyLabel}</span>
       {mode === "eliminacion" && <div className="elimination-lives" aria-live="polite">{players.map((name, index) => <span className={Number(lives[index]) > 0 ? "" : "is-eliminated"} key={`${name}-${index}`}>{playerAvatars[index] || "🐱"} {name} · {"❤️".repeat(Math.max(0, Number(lives[index]) || 0)) || "☠️"}</span>)}</div>}
       {multiplayer && <div className="game-score-summary" aria-label="Resumen del marcador">
         <span>⭐ {playerName}: {Number(scores[currentPlayer]) || 0} pts</span>
@@ -194,7 +199,7 @@ export default function GamePage() {
       <div className="hangman-stage"><HangmanDrawing mistakes={mistakes} maxMistakes={attempts} /><div className="mistake-counter" aria-live="polite" aria-atomic="true">Errores <strong>{mistakes}/{attempts}</strong></div></div>
       <div className="play-area">
         <p className="category-label">Categoría: <strong>{activeRound.categoryName}</strong></p>
-        <div className="definition-box" aria-live="polite">{definitionHint || finished ? activeRound.definicion : formation ? "Ordena las letras para descubrir la palabra. Al final verás su definición." : "Adivina la palabra o usa una pista si la necesitas."}</div>
+        {definitionAllowed && <div className="definition-box" aria-live="polite">{definitionHint || finished ? activeRound.definicion : formation ? "Ordena las letras; al terminar podrás leer la explicación." : "Adivina la palabra. Puedes usar una pista según la dificultad."}</div>}
         {!formation && <p className="hidden-word" aria-live="polite" aria-atomic="true"><span aria-hidden="true">{shownWord}</span><span className="visually-hidden">Palabra: {spokenWord}</span></p>}
         {formation ? <>
           <p className="keyboard-help">🔤 Toca las letras mezcladas para formar la respuesta.</p>
@@ -206,11 +211,12 @@ export default function GamePage() {
           <div className="letter-board" role="group" aria-label="Letras para adivinar">{alphabet.map(letter => <button type="button" key={letter} aria-label={`Probar la letra ${letter}`} aria-pressed={guessed.has(letter)} onClick={() => guess(letter)} disabled={finished || guessed.has(letter)} className={guessed.has(letter) ? (letters.includes(letter) ? "letter-hit" : "letter-miss") : ""}>{letter}</button>)}</div>
         </>}
         <p className="game-status" aria-live="polite">{status || " "}</p>
-        {difficulty === "facil" && <div className="hint-row"><button className="button button-soft" onClick={revealDefinition} disabled={definitionHint || finished}>💡 Ver definición <small>−1 intento</small></button><button className="button button-soft" onClick={revealLetter} disabled={letterHint || finished}>🔎 Revelar letra <small>−2 intentos</small></button></div>}
+        {difficulty === "facil" && <div className="hint-row">{definitionAllowed && <button className="button button-soft" onClick={revealDefinition} disabled={definitionHint || finished}>💡 Ver definición <small>−1 intento</small></button>}<button className="button button-soft" onClick={revealLetter} disabled={letterHint || finished}>🔎 Revelar letra <small>−2 intentos</small></button></div>}
         {difficulty === "normal" && <div className="hint-row"><button className="button button-soft" onClick={revealChallengeHint} disabled={challengeHint || finished}>🧩 Pista sutil <small>−1 intento</small></button></div>}
-        {difficulty === "dificil" && multiplayer && <p className="no-hints-label">🚫 Modo difícil: esta ronda no permite pistas.</p>}
-        <div className="round-actions">{finished && <Link className="button button-plum" to="/resultados">Ver resultado ✨</Link>}</div>
+        {difficulty === "dificil" && <p className="no-hints-label">🚫 Modo difícil: esta ronda no permite pistas.</p>}
+        <div className="round-actions">{finished && <Link className="button button-plum" to="/resultados">Ver resultado ✨</Link>}<button type="button" className="button button-outline finish-session-button" onClick={() => { if (window.confirm("¿Finalizar la sesión ahora? La ronda en curso no se guardará.")) finishSession(); }}>⏹️ Finalizar sesión</button></div>
       </div>
+      {activeReward && <p className="active-reward-badge" title="Recompensa equipada en tu cuenta">🎁 {activeReward.icon} {activeReward.title}</p>}
       <CatReaction name={reactionName} caption={catMessage} className="game-cat" />
     </section></div>
   </section>;

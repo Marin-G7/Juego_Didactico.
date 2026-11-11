@@ -14,6 +14,7 @@ export async function connectDatabase() {
   database = client.db(process.env.MONGODB_DB || "juego_ahorcado");
   const collection = process.env.MONGODB_COLLECTION || "partidas";
   await database.collection(collection).createIndex({ creadaEn: -1 });
+  await database.collection("usuarios").createIndex({ correo: 1 }, { unique: true });
   console.log(`Conectado a MongoDB: ${database.databaseName}, colección ${collection}`);
   return database;
 }
@@ -25,6 +26,11 @@ export function getDatabase() {
 export function getRoundsCollection() {
   if (!database) return null;
   return database.collection(process.env.MONGODB_COLLECTION || "partidas");
+}
+
+export function getUsersCollection() {
+  if (!database) return null;
+  return database.collection("usuarios");
 }
 
 export async function closeDatabase() {

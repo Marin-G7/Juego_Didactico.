@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import datos from "../data/palabras.json";
 import { api } from "../services/api.js";
 import { calculatePoints } from "../services/scoring.js";
+import { useAuth } from "./AuthContext.jsx";
 
 const GameContext = createContext(null);
 const multiplayerModes = ["duelo", "formar-duelo", "eliminacion"];
@@ -15,6 +16,12 @@ const leerSesion = (clave, alternativa) => {
   }
 };
 const idDeJugador = nombre => nombre.trim().toLocaleLowerCase("es").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "jugador";
+const leerPuntosLocales = jugadores => {
+  try {
+    const saved = JSON.parse(localStorage.getItem("puntosPorJugadorLocal") || "{}");
+    return jugadores.map(name => Number(saved[idDeJugador(name)]) || 0);
+  } catch { return jugadores.map(() => 0); }
+};
 const idLocal = () => {
   let id = localStorage.getItem("jugadorLocalId");
   if (!id) { id = `local-${crypto.randomUUID()}`; localStorage.setItem("jugadorLocalId", id); }
@@ -23,6 +30,7 @@ const idLocal = () => {
 
 export function GameProvider({ children }) {
   const navigate = useNavigate();
+  const { user, token, awardPoints } = useAuth();
   const [theme, setThemeState] = useState(() => {
     const savedTheme = localStorage.getItem("temaVisual");
     return ["samurai", "navidad", "colombia", "bosque"].includes(savedTheme) ? savedTheme : "samurai";
@@ -38,7 +46,7 @@ export function GameProvider({ children }) {
   const [scores, setScores] = useState(() => {
     const previousScores = leerSesion("puntuacionJugadores", []);
     const previousHistory = leerSesion("historialPartidas", []);
-    if (mode !== "duelo" || !previousHistory.length) return previousScores;
+    if (mode !== "duelo" || !previousHistory.length) return previousScores.length ? previousScores : leerPuntosLocales(players);
     return players.map(name => previousHistory
       .filter(round => round.jugador === name)
       .reduce((total, round) => total + calculatePoints(round), 0));
@@ -102,7 +110,7 @@ export function GameProvider({ children }) {
     setLivesPerPlayerState(nextLives);
     setScores(previous => {
       const sameRoster = players.length === nextPlayers.length && players.every((name, index) => name === nextPlayers[index]);
-      return sameRoster ? previous : Array(nextPlayers.length).fill(0);
+      return sameRoster ? previous : leerPuntosLocales(nextPlayers);
     });
     setLives(Array(nextPlayers.length).fill(nextLives));
     setCurrentPlayer(0);
@@ -112,7 +120,16 @@ export function GameProvider({ children }) {
     const words = await api.getWords(nextCategory).catch(() => datos.bancoPalabras[nextCategory] || []);
     if (!words?.length) return;
     const lastWord = localStorage.getItem(`ultimaPalabra-${nextCategory}`);
-    const available = words.length > 1 ? words.filter(item => item.palabra !== lastWord) : words;
+    const wordLength = item => [...item.palabra].filter(letter => /[A-ZÑÁÉÍÓÚÜ]/i.test(letter)).length;
+    const byDifficulty = words.filter(item => {
+      const length = wordLength(item);
+      if (difficulty === "facil") return length <= 7;
+      if (difficulty === "dificil") return length >= 8;
+      return length >= 6 && length <= 10;
+    });
+    const pool = byDifficulty.length ? byDifficulty : words;
+    const withoutRepeat = pool.length > 1 ? pool.filter(item => item.palabra !== lastWord) : pool;
+    const available = withoutRepeat.length ? withoutRepeat : pool;
     const selected = available[Math.floor(Math.random() * available.length)];
     localStorage.setItem(`ultimaPalabra-${nextCategory}`, selected.palabra);
     localStorage.setItem("categoriaSeleccionada", nextCategory);
@@ -121,14 +138,22 @@ export function GameProvider({ children }) {
     setSaveNotice("");
     setActiveRound({ ...selected, roundId: `${Date.now()}-${Math.random().toString(16).slice(2)}`, categoryId: nextCategory, categoryName: categories.find(item => item.id === nextCategory)?.name || datos.nombresCategorias[nextCategory] || nextCategory });
     navigate("/juego");
-  }, [categoryId, categories, navigate]);
+  }, [categoryId, categories, difficulty, navigate]);
 
   const finishRound = useCallback(result => {
     const partida = { ...result, id: `${Date.now()}-${Math.random().toString(16).slice(2)}`, creadaEn: new Date().toISOString() };
     setLatestResult(partida);
     setHistory(previous => [...previous, partida]);
     if (multiplayerModes.includes(mode) && partida.gano) {
-      setScores(previous => players.map((_, index) => (Number(previous[index]) || 0) + (index === currentPlayer ? partida.puntos : 0)));
+      setScores(previous => {
+        const next = players.map((_, index) => (Number(previous[index]) || 0) + (index === currentPlayer ? partida.puntos : 0));
+        try {
+          const saved = JSON.parse(localStorage.getItem("puntosPorJugadorLocal") || "{}");
+          players.forEach((name, index) => { saved[idDeJugador(name)] = next[index]; });
+          localStorage.setItem("puntosPorJugadorLocal", JSON.stringify(saved));
+        } catch { /* El marcador de sesión sigue disponible si el almacenamiento local está lleno. */ }
+        return next;
+      });
     }
     if (mode === "eliminacion" && !partida.gano) {
       setLives(previous => previous.map((remaining, index) => index === currentPlayer ? Math.max(0, (Number(remaining) || livesPerPlayer) - 1) : remaining));
@@ -138,9 +163,13 @@ export function GameProvider({ children }) {
       categoria: partida.categoryId,
       jugador: partida.jugador,
       jugadorId: multiplayerModes.includes(mode) ? idDeJugador(partida.jugador) : idLocal()
-    }).then(() => setSaveNotice("Partida guardada en Atlas."))
-      .catch(() => setSaveNotice("Partida guardada en esta pestaña. Configura Atlas para conservarla al cerrar."));
-  }, [currentPlayer, livesPerPlayer, mode, players]);
+    }, token).then(async () => {
+      if (partida.gano && user) {
+        const account = await awardPoints({ roundId: partida.id, gano: partida.gano, errores: partida.errores, intentosMaximos: partida.intentosMaximos, modo: partida.modo, tiempoRestante: partida.tiempoRestante });
+        setSaveNotice(account ? `¡Partida guardada! Tienes ${account.puntos} puntos y ${account.desbloqueos.length} recompensas desbloqueadas.` : "¡Partida guardada correctamente!");
+      } else setSaveNotice("¡Partida guardada correctamente!");
+    }).catch(() => setSaveNotice("No pudimos guardar esta partida ahora. Puedes verla en el resumen de esta sesión."));
+  }, [awardPoints, currentPlayer, livesPerPlayer, mode, players, token, user]);
 
   const nextPlayer = useCallback(() => {
     if (multiplayerModes.includes(mode)) {
@@ -152,6 +181,11 @@ export function GameProvider({ children }) {
     startRound();
   }, [currentPlayer, lives, mode, players, startRound]);
 
+  const finishSession = useCallback(() => {
+    setActiveRound(null);
+    navigate("/resultados");
+  }, [navigate]);
+
   const newSession = useCallback(() => {
     sessionStorage.clear();
     setModeState("individual");
@@ -162,7 +196,7 @@ export function GameProvider({ children }) {
     setPlayerAvatars([]);
     setLivesPerPlayerState(2);
     setLives([]);
-    setScores([]);
+    setScores(leerPuntosLocales(players));
     setCurrentPlayer(0);
     setHistory([]);
     setLatestResult(null);
@@ -179,10 +213,10 @@ export function GameProvider({ children }) {
     mode, setMode, duration, setDuration: setDurationState, attempts, setAttempts, difficulty, setDifficulty,
     players, playerAvatars, updatePlayers, lives, livesPerPlayer, setLivesPerPlayer, remainingPlayers, matchWinner,
     scores, currentPlayer, history, latestResult, categoryId, setCategoryId,
-    activeRound, startRound, finishRound, nextPlayer, saveNotice, newSession,
+    activeRound, startRound, finishRound, nextPlayer, finishSession, saveNotice, newSession,
     categories, theme, setTheme
   }), [mode, setMode, duration, attempts, setAttempts, difficulty, players, playerAvatars, updatePlayers, lives, livesPerPlayer, setLivesPerPlayer, remainingPlayers, matchWinner, scores, currentPlayer, history, latestResult,
-    categoryId, activeRound, startRound, finishRound, nextPlayer, saveNotice, newSession, categories, theme]);
+    categoryId, activeRound, startRound, finishRound, nextPlayer, finishSession, saveNotice, newSession, categories, theme]);
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 }

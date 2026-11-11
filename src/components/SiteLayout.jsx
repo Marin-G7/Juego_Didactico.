@@ -1,10 +1,11 @@
 import { NavLink } from "react-router";
 import { useEffect, useRef, useState } from "react";
-import { api } from "../services/api.js";
 import { useGame } from "../context/GameContext.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export function SiteLayout({ children }) {
   const { theme } = useGame();
+  const { user } = useAuth();
   const styleSymbols = { samurai: "⛩️", navidad: "🎄", colombia: "☀️", bosque: "🌲" };
   const pageSymbols = {
     samurai: ["🎴", "🏮", "⛩️", "🎋", "☀️", "🗡️"],
@@ -12,24 +13,17 @@ export function SiteLayout({ children }) {
     colombia: ["🌺", "🦜", "☕", "🌻", "☀️", "🦋"],
     bosque: ["🍃", "🦋", "🍄", "🪵", "🌼", "🌙"]
   }[theme] || ["🎴", "🏮", "⛩️", "🎋", "☀️", "🗡️"];
-  const [atlas, setAtlas] = useState("consultando");
-  useEffect(() => {
-    api.health().then(data => setAtlas(data.atlas)).catch(() => setAtlas("API apagada"));
-  }, []);
   return (
     <div className={`app-shell theme-${theme}`}>
       <div className="page-edge-decor" aria-hidden="true">
         {pageSymbols.map((symbol, index) => <span className={`page-edge-mark edge-mark-${index + 1}`} key={`${symbol}-${index}`}>{symbol}</span>)}
       </div>
       <header className="topbar">
-        <NavLink className="brand" to="/"><span className="brand-seal" aria-hidden="true">{styleSymbols[theme] || "猫"}</span><span>Gatito Ahorcado<small>APRENDE JUGANDO</small></span></NavLink>
+        <NavLink className="brand" to="/"><span className="brand-seal" aria-hidden="true">{styleSymbols[theme] || "猫"}</span><span>Ahorcado Educativo<small>APRENDE JUGANDO</small></span></NavLink>
         <nav aria-label="Navegación principal">
-          <NavLink to="/">Inicio</NavLink><NavLink to="/categorias">Jugar</NavLink><NavLink to="/resultados">Resultados</NavLink>
+          <NavLink to="/">Inicio</NavLink><NavLink to="/categorias">Jugar</NavLink><NavLink to="/resultados">Resultados</NavLink><NavLink to="/cuenta">{user ? `🪙 ${user.puntos}` : "👤 Cuenta"}</NavLink>
         </nav>
         <MusicToggle theme={theme} />
-        <span className={`api-badge ${atlas === "conectado" ? "api-ok" : ""}`} title="Estado de la conexión con el servidor">
-          <i /> {atlas === "conectado" ? "Atlas conectado" : atlas === "sin configurar" ? "Modo local" : atlas}
-        </span>
       </header>
       <main className="page-content">{children}</main>
       <footer className="page-footer">🐾 ¡Tu próxima aventura empieza con una palabra! <span aria-hidden="true">{styleSymbols[theme] || "✨"}</span></footer>

@@ -26,6 +26,7 @@ export default function CategoriesPage() {
   const [draftNames, setDraftNames] = useState(players);
   const [draftAvatars, setDraftAvatars] = useState(() => players.map((_, index) => playerAvatars[index] || avatarOptions[index % avatarOptions.length]));
   const [draftLives, setDraftLives] = useState(livesPerPlayer);
+  const [selectionType, setSelectionType] = useState("personalizada");
 
   useEffect(() => {
     setDraftNames(players);
@@ -40,7 +41,7 @@ export default function CategoriesPage() {
   };
   const updateName = (index, value) => setDraftNames(previous => previous.map((name, position) => position === index ? value : name));
   const updateAvatar = (index, value) => setDraftAvatars(previous => previous.map((avatar, position) => position === index ? value : avatar));
-  const start = categoryId => {
+  const start = (categoryId, random = false) => {
     if (isMultiplayer(mode)) {
       const names = Array.from({ length: count }, (_, index) => draftNames[index]?.trim() || `Jugador ${index + 1}`);
       const seen = new Set();
@@ -53,7 +54,10 @@ export default function CategoriesPage() {
       });
       updatePlayers(uniqueNames, draftAvatars, draftLives);
     }
-    startRound(categoryId);
+    const destination = random
+      ? categories[Math.floor(Math.random() * categories.length)]?.id
+      : categoryId;
+    if (destination) startRound(destination);
   };
 
   const multiplayer = isMultiplayer(mode);
@@ -69,6 +73,18 @@ export default function CategoriesPage() {
           <span className="mode-icon">{option.icon}</span><strong>{option.title}</strong><small>{option.note}</small>
         </button>)}
       </div>
+      <section className="start-choice" aria-label="Elige cómo seleccionar categoría">
+        <h3>¿Cómo quieres comenzar?</h3>
+        <div className="start-choice-actions">
+          <button type="button" className={`start-choice-card ${selectionType === "rapida" ? "is-selected" : ""}`} aria-pressed={selectionType === "rapida"} onClick={() => setSelectionType("rapida")}>
+            <span aria-hidden="true">🎲</span><strong>Inicio rápido</strong><small>Escoge una categoría al azar y empieza.</small>
+          </button>
+          <button type="button" className={`start-choice-card ${selectionType === "personalizada" ? "is-selected" : ""}`} aria-pressed={selectionType === "personalizada"} onClick={() => setSelectionType("personalizada")}>
+            <span aria-hidden="true">🗺️</span><strong>Selección personalizada</strong><small>Elige tú la categoría de esta partida.</small>
+          </button>
+        </div>
+        {selectionType === "rapida" && <button type="button" className="button button-gold quick-start-button" onClick={() => start(null, true)}>Comenzar con categoría aleatoria ✨</button>}
+      </section>
       {multiplayer && <div className="mode-settings">
         <div className="settings-row">
           <label className="form-field count-field">Número de jugadores
@@ -81,11 +97,6 @@ export default function CategoriesPage() {
               {[1, 2, 3].map(value => <option value={value} key={value}>{value} {value === 1 ? "vida" : "vidas"}</option>)}
             </select>
           </label>}
-          <label className="form-field">Dificultad de pistas
-            <select value={difficulty} onChange={event => setDifficulty(event.target.value)}>
-              <option value="facil">Fácil · pistas actuales</option><option value="normal">Normal · pistas más sutiles</option><option value="dificil">Difícil · sin pistas</option>
-            </select>
-          </label>
         </div>
         <div className="player-fields player-profile-fields">
           {Array.from({ length: count }, (_, index) => <fieldset className="player-profile" key={index}>
@@ -121,7 +132,15 @@ export default function CategoriesPage() {
       {formation && <p className="formation-explainer">🔤 Recibirás las letras mezcladas. Tócalas para construir la palabra y pulsa “Comprobar” antes de que acabe el tiempo.</p>}
       {mode === "eliminacion" && <p className="formation-explainer">💛 Cada respuesta fallida resta una vida. Quien pierda todas queda eliminado; gana quien conserve vidas al final.</p>}
     </section>
-    <div className="category-heading"><h2>Escoge una categoría</h2><span>Hay {categories.length} mundos por descubrir</span></div>
+    <div className="mode-settings difficulty-settings">
+      <label className="form-field">Dificultad de la partida
+        <select value={difficulty} onChange={event => setDifficulty(event.target.value)}>
+          <option value="facil">Fácil · palabras cortas y pistas útiles</option><option value="normal">Normal · palabras variadas y pista sutil</option><option value="dificil">Difícil · palabras largas y sin pistas</option>
+        </select>
+      </label>
+      <p className="helper-copy">La dificultad se aplica en todos los modos: ajusta la longitud de las palabras y las pistas disponibles.</p>
+    </div>
+    {selectionType === "personalizada" && <><div className="category-heading"><h2>Escoge una categoría</h2><span>Hay {categories.length} mundos por descubrir</span></div>
     <div className="category-grid">
       {categories.map((category, index) => {
         const [icon, art] = categoryArt[category.id] || ["✨", "default"];
@@ -130,6 +149,6 @@ export default function CategoriesPage() {
           <strong>{category.name || category.nombre || category.id}</strong><small>{category.count ?? category.cantidad ?? 0} palabras</small><span className="category-arrow">Jugar <b>→</b></span>
         </button>;
       })}
-    </div>
+    </div></>}
   </section>;
 }

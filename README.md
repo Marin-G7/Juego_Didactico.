@@ -34,9 +34,10 @@ Ya está creado el archivo local `server/.env`, ignorado por Git. Abre ese archi
 PORT=3001
 MONGODB_DB=juego_ahorcado
 MONGODB_COLLECTION=partidas
+AUTH_TOKEN_SECRET=un-secreto-aleatorio-de-al-menos-32-caracteres
 ```
 
-No compartas el URI o la contraseña en el chat ni los subas al repositorio. Atlas también debe tener un usuario de base de datos y permitir la IP actual de tu computador en **Network Access**.
+Genera el secreto sin compartirlo con este comando en PowerShell: `node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"`. No compartas el URI, la contraseña o el secreto ni los subas al repositorio. Atlas también debe tener un usuario de base de datos y permitir la IP actual de tu computador en **Network Access**.
 
 ## Iniciar la aplicación
 
@@ -72,3 +73,7 @@ Vite indicará la dirección local para abrir React. En el encabezado verás el 
 - `server/src/db.js`: conexión, base y colección de MongoDB.
 
 El historial temporal vive en la pestaña y se borra al cerrar la sesión o usar “Borrar sesión”. Atlas conserva por separado las partidas consultables desde la sección de historial en la nube. El modo de competencia local usa nombres, no cuentas verificadas. Antes de publicar con usuarios reales, añadiremos autenticación para asociar cada partida a una cuenta validada.
+
+## Cuentas, puntos y recompensas
+
+La página **Cuenta** permite crear una cuenta o iniciar sesión. Las contraseñas se guardan con hash scrypt; las sesiones duran siete días. Las cuentas y sus puntos se guardan en la colección `usuarios` de `juego_ahorcado`. Cada victoria autenticada vincula su ronda al usuario y solo puede premiarse una vez. Las recompensas se desbloquean automáticamente al alcanzar 60, 150, 300 y 500 puntos. Para activar cuentas se necesita `MONGODB_URI` y `AUTH_TOKEN_SECRET` en `server/.env`.

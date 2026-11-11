@@ -3,15 +3,17 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router";
 import App from "./App.jsx";
 import { GameProvider } from "./context/GameContext.jsx";
+import { AuthProvider } from "./context/AuthContext.jsx";
 import "./index.css";
-import "./page-edges.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
-      <GameProvider>
-        <App />
-      </GameProvider>
+      <AuthProvider>
+        <GameProvider>
+          <App />
+        </GameProvider>
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>
 );
