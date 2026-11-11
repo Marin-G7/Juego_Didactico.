@@ -1173,6 +1173,20 @@
         "palabra": "HEMISFERIO",
         "definicion": "Cada una de las dos mitades en que se puede dividir la Tierra."
       }
+    ],
+    "naturaleza": [
+      { "palabra": "BIODIVERSIDAD", "definicion": "Variedad de seres vivos, genes y ecosistemas que existen en una región o en todo el planeta." },
+      { "palabra": "ORQUÍDEA", "definicion": "Planta de flores muy diversas; Colombia es uno de los países con mayor variedad de estas especies." },
+      { "palabra": "MANGLAR", "definicion": "Ecosistema costero donde árboles tolerantes a la sal protegen las orillas y sirven de refugio a muchas especies." },
+      { "palabra": "POLINIZACIÓN", "definicion": "Traslado del polen entre flores, proceso que permite la reproducción de muchas plantas." },
+      { "palabra": "HUMEDAL", "definicion": "Zona de tierra cubierta de agua de forma permanente o temporal, refugio de aves y otras especies." },
+      { "palabra": "FOTOSÍNTESIS", "definicion": "Proceso por el que plantas, algas y algunas bacterias usan luz para producir alimento." },
+      { "palabra": "ECOSISTEMA", "definicion": "Conjunto de seres vivos y elementos físicos que interactúan en un lugar." },
+      { "palabra": "COLIBRÍ", "definicion": "Ave pequeña que puede mantenerse suspendida en el aire mientras visita flores para alimentarse." },
+      { "palabra": "CASCADA", "definicion": "Caída de agua de un río o arroyo desde una altura, causada por un desnivel del terreno." },
+      { "palabra": "RECICLAJE", "definicion": "Transformación de materiales usados para convertirlos en recursos o productos nuevos." },
+      { "palabra": "CORAL", "definicion": "Animal marino que forma colonias y puede construir arrecifes que albergan muchas especies." },
+      { "palabra": "SEMILLA", "definicion": "Estructura de una planta que contiene un embrión y puede germinar en condiciones adecuadas." }
     ]
   },
   "nombresCategorias": {
@@ -1185,6 +1199,7 @@
     "cultura": "Cultura general",
     "anime": "Anime y Japón",
     "gastronomia": "Gastronomía",
-    "geografia": "Geografía"
+    "geografia": "Geografía",
+    "naturaleza": "Naturaleza"
   }
 }

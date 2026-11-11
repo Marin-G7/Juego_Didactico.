@@ -1,6 +1,7 @@
 # Dependencias y salidas generadas
 **/node_modules/
 **/dist/
+**/temp-build/
 
 # Configuración privada local
 server/.env

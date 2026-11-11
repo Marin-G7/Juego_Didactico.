@@ -43,18 +43,19 @@ app.post("/api/partidas", async (request, response) => {
   const { palabra, categoria, gano, puntos, errores, modo, jugador, jugadorId } = request.body ?? {};
   if (typeof palabra !== "string" || palabra.length < 1 || palabra.length > 40 || !Object.hasOwn(datos.bancoPalabras, categoria) ||
       typeof gano !== "boolean" || !Number.isFinite(Number(puntos)) || !Number.isFinite(Number(errores)) ||
-      !["individual", "duelo", "tiempo"].includes(modo) || typeof jugador !== "string" || jugador.length > 40 ||
+      !["individual", "duelo", "tiempo", "formar", "formar-duelo", "eliminacion"].includes(modo) || typeof jugador !== "string" || jugador.length > 40 ||
       typeof jugadorId !== "string" || !/^[a-z0-9-]{1,80}$/.test(jugadorId)) {
     return response.status(400).json({ error: "Los datos de la partida no son válidos." });
   }
   try {
     const documento = {
       palabra, categoria, gano,
-      puntos: Math.max(0, Math.min(85, Number(puntos))),
-      errores: Math.max(0, Math.min(6, Number(errores))),
+      puntos: Math.max(0, Math.min(55, Number(puntos))),
+      errores: Math.max(0, Math.min(10, Number(errores))),
+      intentosMaximos: Math.min(10, Math.max(6, Number(request.body.intentosMaximos) || 6)),
       modo, jugador: jugador.trim() || "Jugador", jugadorId,
       tiempoRestante: request.body.tiempoRestante !== null && request.body.tiempoRestante !== undefined && Number.isFinite(Number(request.body.tiempoRestante))
-        ? Math.max(0, Math.min(90, Number(request.body.tiempoRestante))) : null,
+        ? Math.max(0, Math.min(300, Number(request.body.tiempoRestante))) : null,
       creadaEn: new Date()
     };
     const resultado = await collection.insertOne(documento);

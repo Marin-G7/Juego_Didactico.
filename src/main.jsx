@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router";
 import App from "./App.jsx";
 import { GameProvider } from "./context/GameContext.jsx";
 import "./index.css";
+import "./page-edges.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

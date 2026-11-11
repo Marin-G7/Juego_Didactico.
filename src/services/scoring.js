@@ -1,13 +1,13 @@
-const MAX_ERRORS = 6;
-const MAX_TIME_BONUS = 15;
+const MAX_TIME_BONUS = 10;
 
 export function calculatePoints(round) {
   if (!round?.gano) return 0;
 
-  const errors = Math.min(MAX_ERRORS, Math.max(0, Number(round.errores) || 0));
-  const attemptsBonus = (MAX_ERRORS - errors) * 5;
+  const maxAttempts = Math.min(10, Math.max(6, Number(round.intentosMaximos) || 6));
+  const errors = Math.min(maxAttempts, Math.max(0, Number(round.errores) || 0));
+  const attemptsBonus = (maxAttempts - errors) * 2;
   const seconds = Math.max(0, Number(round.tiempoRestante) || 0);
-  const timeBonus = round.modo === "tiempo" ? Math.min(MAX_TIME_BONUS, Math.floor(seconds / 6)) : 0;
+  const timeBonus = ["tiempo", "formar", "formar-duelo"].includes(round.modo) ? Math.min(MAX_TIME_BONUS, Math.floor(seconds / 30)) : 0;
 
-  return 40 + attemptsBonus + timeBonus;
+  return 25 + attemptsBonus + timeBonus;
 }
