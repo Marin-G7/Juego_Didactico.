@@ -4,6 +4,7 @@ let client;
 let database;
 
 export async function connectDatabase() {
+  // Sin URI, la API mantiene el banco local disponible, pero no puede guardar datos en la nube.
   const uri = process.env.MONGODB_URI;
   if (!uri || uri.includes("USUARIO:CONTRASENA")) {
     console.warn("MongoDB sin configurar. La API funcionará en modo local; las partidas no se guardarán en Atlas.");

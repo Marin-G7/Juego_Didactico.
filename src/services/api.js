@@ -1,3 +1,4 @@
+// Todas las llamadas HTTP pasan por aquí para compartir formato JSON y errores coherentes.
 async function request(path, options = {}) {
   const response = await fetch(path, {
     ...options,
@@ -10,6 +11,7 @@ async function request(path, options = {}) {
   return response.status === 204 ? null : response.json();
 }
 
+// Métodos del frontend agrupados por recurso; cada uno corresponde a una ruta de server/src/app.js.
 export const api = {
   health: () => request("/api/health"),
   getCategories: () => request("/api/categorias"),

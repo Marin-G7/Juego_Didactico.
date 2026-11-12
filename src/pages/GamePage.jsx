@@ -9,6 +9,8 @@ import { rewards } from "../data/rewards.js";
 const alphabet = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
 const multiplayerModes = ["duelo", "formar-duelo", "eliminacion"];
 const formationModes = ["formar", "formar-duelo"];
+
+// Convierte vocales acentuadas en letras base, pero conserva la Ñ como letra distinta.
 function normalize(text) {
   return text.toLocaleUpperCase("es").replace(/Ñ/g, "\u0001")
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\u0001/g, "Ñ");
@@ -41,6 +43,7 @@ export default function GamePage() {
   const [reaction, setReaction] = useState("pensando");
   const [catMessage, setCatMessage] = useState("¡A ver si encuentras la palabra!");
   const [finished, setFinished] = useState(false);
+  // Los refs permiten que teclado/temporizador consulten el valor actual sin esperar otro render.
   const finishedRef = useRef(false);
   const mistakesRef = useRef(0);
 

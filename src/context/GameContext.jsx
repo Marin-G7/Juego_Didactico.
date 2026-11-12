@@ -35,6 +35,7 @@ export function GameProvider({ children }) {
     const savedTheme = localStorage.getItem("temaVisual");
     return ["samurai", "navidad", "colombia", "bosque"].includes(savedTheme) ? savedTheme : "samurai";
   });
+  // Opciones e historial de la partida usan sessionStorage; se limitan a la sesión del navegador.
   const [mode, setModeState] = useState(() => sessionStorage.getItem("modoJuego") || "individual");
   const [duration, setDurationState] = useState(() => Number(sessionStorage.getItem("duracionTiempo")) || 60);
   const [attempts, setAttemptsState] = useState(() => Math.min(10, Math.max(6, Number(sessionStorage.getItem("intentosMaximos")) || 6)));
@@ -116,6 +117,7 @@ export function GameProvider({ children }) {
     setCurrentPlayer(0);
   }, [players, livesPerPlayer]);
 
+  // Obtiene las palabras, aplica la dificultad y prepara una palabra nueva para la pantalla de juego.
   const startRound = useCallback(async (nextCategory = categoryId) => {
     const words = await api.getWords(nextCategory).catch(() => datos.bancoPalabras[nextCategory] || []);
     if (!words?.length) return;
@@ -140,6 +142,7 @@ export function GameProvider({ children }) {
     navigate("/juego");
   }, [categoryId, categories, difficulty, navigate]);
 
+  // Centraliza el cierre de una ronda: resultado, marcador y guardado local/remoto.
   const finishRound = useCallback(result => {
     const partida = { ...result, id: `${Date.now()}-${Math.random().toString(16).slice(2)}`, creadaEn: new Date().toISOString() };
     setLatestResult(partida);
@@ -171,6 +174,7 @@ export function GameProvider({ children }) {
     }).catch(() => setSaveNotice("No pudimos guardar esta partida ahora. Puedes verla en el resumen de esta sesión."));
   }, [awardPoints, currentPlayer, livesPerPlayer, mode, players, token, user]);
 
+  // En multijugador salta al siguiente participante que aún tenga vidas.
   const nextPlayer = useCallback(() => {
     if (multiplayerModes.includes(mode)) {
       const eligible = players.map((_, index) => index).filter(index => mode !== "eliminacion" || (Number(lives[index]) || 0) > 0);
@@ -221,6 +225,7 @@ export function GameProvider({ children }) {
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 }
 
+// Hook de acceso: las páginas usan el contexto sin importar cómo se implementa su almacenamiento.
 export function useGame() {
   const context = useContext(GameContext);
   if (!context) throw new Error("useGame debe usarse dentro de GameProvider.");

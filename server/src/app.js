@@ -16,6 +16,7 @@ function publicUser(user) {
   return { id: user._id.toString(), nombre: user.nombre, correo: user.correo, puntos: points, desbloqueos: unlockedRewards(points), recompensaActiva: user.recompensaActiva || "" };
 }
 
+// El token firmado permite identificar la cuenta sin enviar la contraseña en cada solicitud.
 function createToken(userId) {
   const secret = process.env.AUTH_TOKEN_SECRET;
   if (!secret || secret.length < 32) throw new Error("Configura AUTH_TOKEN_SECRET con al menos 32 caracteres en server/.env.");
@@ -48,6 +49,7 @@ function optionalAuthenticated(request, response, next) {
   return authenticated(request, response, next);
 }
 
+// Registro: valida los campos y guarda un hash de la contraseña, nunca el texto original.
 app.post("/api/auth/registro", async (request, response) => {
   if (!process.env.AUTH_TOKEN_SECRET || process.env.AUTH_TOKEN_SECRET.length < 32) return response.status(503).json({ error: "Configura AUTH_TOKEN_SECRET con al menos 32 caracteres en server/.env." });
   const collection = getUsersCollection();
@@ -108,6 +110,7 @@ app.post("/api/auth/recompensa", authenticated, async (request, response) => {
   response.json(publicUser({ ...user, recompensaActiva: rewardId }));
 });
 
+// El premio se calcula en el servidor y partidasPremiadas hace idempotente la acreditación.
 app.post("/api/auth/puntos", authenticated, async (request, response) => {
   const collection = getUsersCollection();
   const { roundId } = request.body || {};

@@ -1,5 +1,6 @@
 const MAX_TIME_BONUS = 10;
 
+// Una derrota da cero; una victoria suma base, intentos conservados y un bono de tiempo limitado.
 export function calculatePoints(round) {
   if (!round?.gano) return 0;
 

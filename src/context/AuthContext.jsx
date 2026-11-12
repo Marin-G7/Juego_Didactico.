@@ -5,12 +5,14 @@ const AuthContext = createContext(null);
 const TOKEN_KEY = "gatitoAuthToken";
 
 export function AuthProvider({ children }) {
+  // El token se conserva para recuperar la sesión después de actualizar o reabrir la página.
   const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY) || "");
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(Boolean(token));
 
   useEffect(() => {
     if (!token) { setLoading(false); return undefined; }
+    // El servidor valida que el token siga vigente antes de mostrar la cuenta.
     let cancelled = false;
     api.account(token).then(account => { if (!cancelled) setUser(account); })
       .catch(() => { if (!cancelled) { localStorage.removeItem(TOKEN_KEY); setToken(""); setUser(null); } })
@@ -28,6 +30,7 @@ export function AuthProvider({ children }) {
   const login = useCallback(async data => acceptSession(await api.login(data)), [acceptSession]);
   const logout = useCallback(() => { localStorage.removeItem(TOKEN_KEY); setToken(""); setUser(null); }, []);
   const awardPoints = useCallback(async round => {
+    // El backend decide los puntos y evita premiar dos veces el mismo identificador de ronda.
     if (!token || !round.gano || !round.puntos) return null;
     const account = await api.awardPoints(token, round);
     setUser(account);

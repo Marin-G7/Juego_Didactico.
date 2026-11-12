@@ -1,6 +1,8 @@
-# Gatito Ahorcado · React + Node + MongoDB Atlas
+# Ahorcado Educativo · React + Node + MongoDB Atlas
 
 Esta rama transforma el juego original en una aplicación React. Incluye diez categorías, reacciones del gato, pistas, turnos de hasta diez jugadores, contrarreloj y estilo inspirado en Japón. La copia HTML original se conserva en `legacy-html/` para que puedas consultarla mientras aprendes.
+
+Para conocer el propósito de cada carpeta, el flujo de una partida y cómo se conectan React, Express y MongoDB, consulta la [Documentación del código](DOCUMENTACION_CODIGO.md).
 
 ## Estructura
 
@@ -58,7 +60,7 @@ npm run api
 npm run dev
 ```
 
-Vite indicará la dirección local para abrir React. En el encabezado verás el estado de Atlas. Si dice “Modo local”, revisa el URI, el usuario y la IP permitida.
+Vite indicará la dirección local para abrir React. La selección de categorías y el juego pueden usar el banco local de palabras. Para cuentas e historial en la nube, revisa la conexión del backend con Atlas.
 
 ## Partes para aprender
 
@@ -72,7 +74,7 @@ Vite indicará la dirección local para abrir React. En el encabezado verás el 
 - `server/src/app.js`: rutas y validación de los datos recibidos.
 - `server/src/db.js`: conexión, base y colección de MongoDB.
 
-El historial temporal vive en la pestaña y se borra al cerrar la sesión o usar “Borrar sesión”. Atlas conserva por separado las partidas consultables desde la sección de historial en la nube. El modo de competencia local usa nombres, no cuentas verificadas. Antes de publicar con usuarios reales, añadiremos autenticación para asociar cada partida a una cuenta validada.
+El marcador de la sesión se conserva en el navegador. Las partidas también pueden guardarse en Atlas si la conexión está configurada. El modo multijugador local identifica a los participantes por sus nombres; las cuentas permiten guardar puntos y recompensas individuales.
 
 ## Cuentas, puntos y recompensas
 
